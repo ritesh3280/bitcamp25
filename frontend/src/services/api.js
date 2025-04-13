@@ -20,11 +20,20 @@ async function request(endpoint, options = {}) {
     ...options.headers,
   };
 
+  // Add CORS mode
+  const requestOptions = {
+    ...options,
+    headers,
+    mode: "cors", // Explicitly set CORS mode
+    credentials: "omit", // Changed from "same-origin" to "omit" for simpler CORS
+  };
+
   try {
-    const response = await fetch(url, {
-      ...options,
-      headers,
-    });
+    console.log(
+      `Fetching ${url} with method: ${requestOptions.method || "GET"}`
+    );
+
+    const response = await fetch(url, requestOptions);
 
     // Handle non-JSON responses
     const contentType = response.headers.get("content-type");
@@ -33,20 +42,35 @@ async function request(endpoint, options = {}) {
 
       // Check for error responses
       if (!response.ok) {
-        throw new Error(data.error || "An unexpected error occurred");
+        console.error(
+          `API returned error status ${response.status}: ${
+            data.error || "Unknown error"
+          }`
+        );
+        throw new Error(data.error || `API error: ${response.status}`);
       }
 
       return data;
     } else {
       // Handle non-JSON responses like images
       if (!response.ok) {
-        throw new Error("An unexpected error occurred");
+        console.error(`API returned error status ${response.status}`);
+        throw new Error(`API error: ${response.status}`);
       }
 
       return response;
     }
   } catch (error) {
     console.error(`API Error (${endpoint}):`, error);
+
+    // Enhanced error logging
+    if (error.name === "TypeError" && error.message === "Failed to fetch") {
+      console.error(
+        "Network error - this could be due to CORS policy or server unavailability"
+      );
+      console.error("Check that backend server is running at:", API_BASE_URL);
+    }
+
     throw error;
   }
 }
@@ -55,6 +79,11 @@ async function request(endpoint, options = {}) {
  * API Service Object
  */
 const api = {
+  /**
+   * Simple ping to check if the backend is available
+   */
+  ping: () => request("/api/ping"),
+
   /**
    * Check API status
    */
@@ -154,14 +183,46 @@ const api = {
   /**
    * Ask a question about a specific frame
    */
-  askQuestion: (frameId, question) =>
-    request("/api/ask", {
-      method: "POST",
-      body: JSON.stringify({
-        frame_id: frameId,
-        question: question,
-      }),
-    }),
+  askQuestion: async (frameId, question, conversationHistory = []) => {
+    try {
+      // Try the standard request approach first
+      return await request("/api/ask", {
+        method: "POST",
+        body: JSON.stringify({
+          frame_id: frameId,
+          question: question,
+          conversation_history: conversationHistory,
+        }),
+      });
+    } catch (error) {
+      console.warn(
+        "Standard request to /api/ask failed, trying direct fetch as fallback:",
+        error
+      );
+
+      // Direct fetch as fallback if the request function fails (e.g., due to CORS)
+      const response = await fetch(`${API_BASE_URL}/api/ask`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          frame_id: frameId,
+          question: question,
+          conversation_history: conversationHistory,
+        }),
+        mode: "cors",
+        credentials: "omit",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `API error: ${response.status}`);
+      }
+
+      return await response.json();
+    }
+  },
 
   /**
    * Get list of available cameras
@@ -179,6 +240,46 @@ const api = {
         ...options,
       }),
     }),
+
+  /**
+   * Chat with the AI about a specific frame
+   * Uses a simplified endpoint to avoid CORS issues
+   */
+  chatWithFrame: async (frameId, question, conversationHistory = []) => {
+    console.log(
+      `Chatting about frame ${frameId}, direct fetch to /chat endpoint`
+    );
+
+    try {
+      // Direct fetch implementation to avoid complex CORS handling
+      const response = await fetch(`${API_BASE_URL}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          frame_id: frameId,
+          question: question,
+          conversation_history: conversationHistory,
+        }),
+        mode: "cors",
+        credentials: "omit",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage =
+          errorData.error || `Server error: ${response.status}`;
+        console.error(`Chat error: ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Chat endpoint error:", error);
+      throw error;
+    }
+  },
 
   /**
    * Proxy a request to avoid CORS issues
@@ -205,6 +306,47 @@ const api = {
         camera_id: cameraId,
       }),
     }),
+
+  /**
+   * Perform a semantic search on frames within a session
+   */
+  semanticFrameSearch: async (sessionId, query) => {
+    console.log(
+      `Performing semantic search in session ${sessionId} with query: "${query}"`
+    );
+
+    try {
+      // Direct fetch implementation to avoid complex CORS handling
+      const response = await fetch(
+        `${API_BASE_URL}/api/frames/semantic-search`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            session_id: sessionId,
+            query: query,
+          }),
+          mode: "cors",
+          credentials: "omit",
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage =
+          errorData.error || `Server error: ${response.status}`;
+        console.error(`Semantic search error: ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Semantic search endpoint error:", error);
+      throw error;
+    }
+  },
 };
 
 export default api;

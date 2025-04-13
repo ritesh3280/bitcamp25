@@ -13,6 +13,8 @@ import {
   FiRefreshCw,
   FiCheckCircle,
   FiAlertCircle,
+  FiZap,
+  FiAward,
 } from "react-icons/fi";
 import api from "../services/api";
 
@@ -141,7 +143,7 @@ const ChatMessage = ({ isUser, content, timestamp }) => (
           shadow-sm
         `}
       >
-        <p className="text-sm leading-relaxed">{content}</p>
+        <p className="text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
       </div>
       <div
         className={`flex items-center gap-1 mt-1 ${
@@ -155,19 +157,42 @@ const ChatMessage = ({ isUser, content, timestamp }) => (
   </div>
 );
 
+const TypingIndicator = () => (
+  <div className="flex justify-start mb-3">
+    <div className="max-w-[85%]">
+      <div className="bg-gray-100 text-gray-900 rounded-2xl rounded-tl-sm shadow-sm px-4 py-3">
+        <div className="flex items-center space-x-2">
+          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+          <div
+            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
+          <div
+            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+            style={{ animationDelay: "0.4s" }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const AskPopup = ({ frame, onClose, triggerRect }) => {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([
     {
       content:
-        "Hi! I can help you analyze this frame. What would you like to know?",
+        "Hi! I'm GPT-4o. I can help analyze this frame by describing what I see and answering your questions about it. What would you like to know?",
       isUser: false,
-      timestamp: "Just now",
+      timestamp: new Date().toLocaleTimeString(),
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState([]);
+  const [error, setError] = useState("");
   const popupRef = useRef(null);
   const chatHistoryRef = useRef(null);
+  const inputRef = useRef(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
@@ -192,6 +217,13 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
 
       setPosition({ top, left });
     }
+
+    // Focus the input when the popup opens
+    if (inputRef.current) {
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 100);
+    }
   }, [triggerRect]);
 
   const handleClickOutside = (event) => {
@@ -210,11 +242,13 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
   const handleSendMessage = async () => {
     if (!question.trim() || isLoading) return;
 
+    setError(""); // Clear any previous errors
+
     // Add user message
     const userMessage = {
       content: question,
       isUser: true,
-      timestamp: "Just now",
+      timestamp: new Date().toLocaleTimeString(),
     };
 
     const newMessages = [...messages, userMessage];
@@ -225,42 +259,55 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
     try {
       console.log("Asking about frame:", frame.id, "Question:", question);
 
-      // For now, let's simulate a response since we might not have a real backend endpoint
-      // In a real app, uncomment the line below to use the actual API
-      // const response = await api.askQuestion(frame.id, question);
+      // Use the new chatWithFrame method instead of askQuestion
+      const response = await api.chatWithFrame(
+        frame.id,
+        question,
+        conversationHistory
+      );
 
-      // Simulated response
-      const simulatedResponse = {
-        answer: `This is a simulated response about frame ${
-          frame.id
-        }. In this frame, I can see ${
-          frame.objects?.join(", ") || "various objects"
-        }. To get real AI responses, please connect this to a proper API endpoint.`,
-      };
+      if (response && response.answer) {
+        // Add AI response
+        setMessages([
+          ...newMessages,
+          {
+            content: response.answer,
+            isUser: false,
+            timestamp: new Date().toLocaleTimeString(),
+          },
+        ]);
 
-      // Add AI response
-      setMessages([
-        ...newMessages,
-        {
-          content: simulatedResponse.answer,
-          isUser: false,
-          timestamp: "Just now",
-        },
-      ]);
+        // Update conversation history for next message
+        setConversationHistory(response.conversation || []);
+      } else {
+        throw new Error("Invalid response from API");
+      }
     } catch (error) {
-      // Handle error
+      console.error("Error asking question:", error);
+
+      // Set error state
+      setError(
+        error.message ||
+          "Failed to connect to the AI service. Please try again later."
+      );
+
+      // Add error message to chat
       setMessages([
         ...newMessages,
         {
           content:
-            "Sorry, I'm having trouble processing your question. Please try again later.",
+            "Sorry, I encountered an error processing your question. Please try again or check the console for details.",
           isUser: false,
-          timestamp: "Just now",
+          timestamp: new Date().toLocaleTimeString(),
         },
       ]);
-      console.error("Error asking question:", error);
     } finally {
       setIsLoading(false);
+
+      // Focus the input after sending
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
     }
   };
 
@@ -290,7 +337,7 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
       className="
         fixed z-50 
         w-[400px] h-[500px] 
-        bg-gray-50
+        bg-white
         rounded-xl 
         shadow-lg shadow-gray-200/80
         border border-gray-200
@@ -326,12 +373,12 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-900">
-              Frame Analysis
+              Chat with GPT-4o
             </h3>
             <p className="text-xs text-gray-500 flex items-center gap-1">
               <span>{frame.id}</span>
               <span className="block w-1 h-1 rounded-full bg-gray-300" />
-              <span>Active</span>
+              <span>Frame Analysis</span>
             </p>
           </div>
         </div>
@@ -355,31 +402,22 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
         className="
           flex-1 
           overflow-y-auto 
-          px-4 py-6
-          space-y-4
-          bg-gradient-to-b from-gray-50/50 to-white
+          px-4 py-4
+          space-y-2
+          bg-white
         "
       >
         {messages.map((message, index) => (
           <ChatMessage key={index} {...message} />
         ))}
 
-        {isLoading && (
-          <div className="flex justify-start mb-3">
-            <div className="max-w-[85%]">
-              <div className="bg-gray-100 text-gray-900 rounded-2xl rounded-tl-sm shadow-sm px-4 py-2.5">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div
-                    className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                    style={{ animationDelay: "0.2s" }}
-                  ></div>
-                  <div
-                    className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                    style={{ animationDelay: "0.4s" }}
-                  ></div>
-                </div>
-              </div>
+        {isLoading && <TypingIndicator />}
+
+        {error && (
+          <div className="bg-red-50 text-red-600 rounded-lg p-2 text-xs mt-2 mb-2">
+            <div className="flex items-center">
+              <FiAlertCircle className="mr-1" />
+              <span>{error}</span>
             </div>
           </div>
         )}
@@ -398,6 +436,7 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
         <div className="flex items-end gap-2">
           <div className="relative flex-1">
             <textarea
+              ref={inputRef}
               rows={2}
               placeholder="Ask about this frame..."
               value={question}
@@ -419,6 +458,9 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
                 disabled:opacity-70
               "
             />
+            <div className="absolute bottom-2 right-3 text-xs text-gray-400">
+              {isLoading ? "Processing..." : "Enter to send"}
+            </div>
           </div>
           <button
             onClick={handleSendMessage}
@@ -436,8 +478,265 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
               disabled:cursor-not-allowed
             "
           >
-            <FiSend className="w-4 h-4" />
+            {isLoading ? (
+              <FiRefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <FiSend className="w-4 h-4" />
+            )}
           </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Super Search result item component
+const SearchResultItem = ({ result, onSelect }) => {
+  return (
+    <div
+      className="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition-shadow cursor-pointer bg-white"
+      onClick={() => onSelect(result)}
+    >
+      <div className="flex items-start gap-4">
+        <div className="shrink-0 w-20 h-20 bg-gray-100 rounded-lg overflow-hidden">
+          <img
+            src={api.getFrameImage(result.id)}
+            alt={`Frame ${result.id}`}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.src = "https://placehold.co/80x80?text=Frame";
+            }}
+          />
+        </div>
+
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <h3 className="text-sm font-medium text-gray-900">{result.id}</h3>
+            <span className="text-xs text-gray-500">{result.timestamp}</span>
+          </div>
+
+          <div className="mt-1">
+            <div className="flex items-center gap-1 mb-1">
+              <FiAward className="text-yellow-500 w-3 h-3" />
+              <span className="text-xs font-medium text-gray-700">
+                {(result.similarity * 100).toFixed(1)}% match
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-1">
+            <p className="text-sm text-gray-600">{result.explanation}</p>
+          </div>
+
+          <div className="flex flex-wrap gap-1 mt-2">
+            {result.objects.slice(0, 3).map((obj, idx) => (
+              <span
+                key={idx}
+                className="px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded-full"
+              >
+                {obj}
+              </span>
+            ))}
+            {result.objects.length > 3 && (
+              <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded-full">
+                +{result.objects.length - 3}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Super Search popup component
+const SuperSearchPopup = ({ sessionId, onClose }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [error, setError] = useState("");
+  const popupRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // Focus the input when the popup opens
+    if (inputRef.current) {
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 100);
+    }
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (popupRef.current && !popupRef.current.contains(event.target)) {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleSemanticSearch = async () => {
+    if (!searchQuery.trim() || isSearching) return;
+
+    setError("");
+    setIsSearching(true);
+
+    try {
+      const response = await api.semanticFrameSearch(sessionId, searchQuery);
+      if (response && response.results) {
+        setSearchResults(response.results);
+      } else {
+        throw new Error("Invalid response format");
+      }
+    } catch (error) {
+      console.error("Error performing semantic search:", error);
+      setError(
+        error.message ||
+          "Failed to perform search. Please try again with a different query."
+      );
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSemanticSearch();
+    }
+  };
+
+  const handleResultSelect = (result) => {
+    // Find the matching frame in the session and highlight it
+    // This function is passed from the parent component via onSelectFrame
+    if (onClose) {
+      onClose(result);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div
+        ref={popupRef}
+        className="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col"
+      >
+        <div className="p-4 border-b border-gray-100 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-indigo-100">
+              <FiZap className="w-5 h-5 text-indigo-600" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Super Search
+            </h2>
+          </div>
+          <button
+            onClick={() => onClose()}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <FiX className="w-5 h-5 text-gray-500" />
+          </button>
+        </div>
+
+        <div className="p-4 border-b border-gray-100">
+          <div className="flex items-stretch gap-2">
+            <div className="relative flex-1">
+              <input
+                ref={inputRef}
+                type="text"
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder="Describe what you're looking for..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleKeyPress}
+                disabled={isSearching}
+              />
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            </div>
+            <button
+              onClick={handleSemanticSearch}
+              disabled={!searchQuery.trim() || isSearching}
+              className="px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isSearching ? (
+                <>
+                  <FiRefreshCw className="w-4 h-4 animate-spin" />
+                  <span>Searching...</span>
+                </>
+              ) : (
+                <>
+                  <FiZap className="w-4 h-4" />
+                  <span>Search</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {error && (
+            <div className="mt-2 p-2 bg-red-50 text-red-600 rounded-lg text-sm flex items-center gap-2">
+              <FiAlertCircle className="w-4 h-4" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <p className="mt-2 text-xs text-gray-500">
+            Use natural language to describe frames you're looking for. For
+            example: "person near a computer" or "frames showing storage
+            devices"
+          </p>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+          {isSearching ? (
+            <div className="flex flex-col items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mb-4"></div>
+              <p className="text-gray-500">
+                Finding the most relevant frames...
+              </p>
+            </div>
+          ) : searchResults.length > 0 ? (
+            <div>
+              <div className="mb-4">
+                <h3 className="text-sm font-medium text-gray-700">
+                  Top Results
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Found {searchResults.length} frames matching your query
+                </p>
+              </div>
+              {searchResults.map((result) => (
+                <SearchResultItem
+                  key={result.id}
+                  result={result}
+                  onSelect={handleResultSelect}
+                />
+              ))}
+            </div>
+          ) : searchQuery ? (
+            <div className="flex flex-col items-center justify-center h-64 text-center">
+              <FiSearch className="w-10 h-10 text-gray-300 mb-4" />
+              <p className="text-gray-500 mb-1">No results found</p>
+              <p className="text-sm text-gray-400">
+                Try different search terms or check if the session has frames
+                with descriptions
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-64 text-center">
+              <FiZap className="w-10 h-10 text-indigo-200 mb-4" />
+              <p className="text-gray-500 mb-1">
+                Enter a search query to find relevant frames
+              </p>
+              <p className="text-sm text-gray-400">
+                The AI will find frames that semantically match your description
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -458,6 +757,7 @@ const VideoFrames = () => {
   const [filteredFrames, setFilteredFrames] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [expandedFrameId, setExpandedFrameId] = useState(null);
+  const [superSearchOpen, setSuperSearchOpen] = useState(false);
 
   // Fetch sessions from the API
   useEffect(() => {
@@ -561,6 +861,24 @@ const VideoFrames = () => {
     } else {
       setExpandedFrameId(frameId);
     }
+  };
+
+  // Handle selection of a frame from super search
+  const handleSuperSearchFrameSelect = (result) => {
+    // Find the matching frame in the session frames
+    const frameId = result.id;
+    const matchingFrame = sessionFrames.find((frame) => frame.id === frameId);
+
+    if (matchingFrame) {
+      // Highlight and scroll to this frame
+      setExpandedFrameId(frameId);
+
+      // Also show the frame in the modal
+      handleFrameClick(matchingFrame);
+    }
+
+    // Close the super search popup
+    setSuperSearchOpen(false);
   };
 
   return (
@@ -682,7 +1000,15 @@ const VideoFrames = () => {
                     <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   </div>
                 </div>
-                <div className="ml-4">
+                <div className="ml-4 flex gap-2">
+                  <button
+                    onClick={() => setSuperSearchOpen(true)}
+                    className="px-3 py-2 rounded-lg text-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors flex items-center gap-2"
+                  >
+                    <FiZap className="w-4 h-4" />
+                    Super Search
+                  </button>
+
                   <button
                     onClick={() => {
                       setSelectedSession(null);
@@ -914,6 +1240,13 @@ const VideoFrames = () => {
             setChatFrame(null);
           }}
           triggerRect={askPopupTriggerRect}
+        />
+      )}
+
+      {superSearchOpen && selectedSession && (
+        <SuperSearchPopup
+          sessionId={selectedSession.id}
+          onClose={handleSuperSearchFrameSelect}
         />
       )}
     </div>
