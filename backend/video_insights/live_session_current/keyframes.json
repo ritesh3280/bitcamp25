@@ -1,0 +1,245 @@
+{
+  "session_start": "2025-04-12T22:03:00.687822",
+  "frames": [
+    {
+      "frame_id": 44,
+      "timestamp": "2025-04-12T22:13:21.924753",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000044.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 43,
+      "timestamp": "2025-04-12T22:13:21.757737",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000043.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 42,
+      "timestamp": "2025-04-12T22:13:21.555135",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000042.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 41,
+      "timestamp": "2025-04-12T22:13:21.460172",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000041.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 40,
+      "timestamp": "2025-04-12T22:13:21.355930",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000040.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 39,
+      "timestamp": "2025-04-12T22:13:21.259829",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000039.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 38,
+      "timestamp": "2025-04-12T22:13:21.157172",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000038.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 37,
+      "timestamp": "2025-04-12T22:13:21.057084",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000037.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 36,
+      "timestamp": "2025-04-12T22:13:20.957733",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000036.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 35,
+      "timestamp": "2025-04-12T22:13:20.867588",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000035.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 34,
+      "timestamp": "2025-04-12T22:13:20.766131",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000034.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 33,
+      "timestamp": "2025-04-12T22:13:20.665245",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000033.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 32,
+      "timestamp": "2025-04-12T22:13:20.454605",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000032.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 31,
+      "timestamp": "2025-04-12T22:13:20.354229",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000031.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 30,
+      "timestamp": "2025-04-12T22:13:20.257122",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000030.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 29,
+      "timestamp": "2025-04-12T22:13:20.156108",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000029.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 28,
+      "timestamp": "2025-04-12T22:13:20.060519",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000028.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 27,
+      "timestamp": "2025-04-12T22:13:19.953846",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000027.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 26,
+      "timestamp": "2025-04-12T22:13:19.862561",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000026.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 25,
+      "timestamp": "2025-04-12T22:13:19.756660",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000025.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 24,
+      "timestamp": "2025-04-12T22:13:19.657571",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000024.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 23,
+      "timestamp": "2025-04-12T22:13:19.560094",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000023.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 22,
+      "timestamp": "2025-04-12T22:13:19.465160",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000022.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 21,
+      "timestamp": "2025-04-12T22:13:19.362990",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000021.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 20,
+      "timestamp": "2025-04-12T22:13:19.268860",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000020.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 19,
+      "timestamp": "2025-04-12T22:13:19.152399",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000019.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 18,
+      "timestamp": "2025-04-12T22:13:19.022037",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000018.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 17,
+      "timestamp": "2025-04-12T22:13:18.904780",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000017.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 16,
+      "timestamp": "2025-04-12T22:13:18.785353",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000016.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    },
+    {
+      "frame_id": 15,
+      "timestamp": "2025-04-12T22:13:18.651077",
+      "image_path": "/Users/ritesh/bit25hack/bitcamp25/backend/video_insights/live_session_current/live_frames/frame_000015.jpg",
+      "boxes": {},
+      "confidence": {},
+      "detections": []
+    }
+  ]
+}

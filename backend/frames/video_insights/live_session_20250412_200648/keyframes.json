@@ -1,0 +1,404 @@
+{
+  "metadata": {
+    "created": "2025-04-12T20:06:48.639569",
+    "version": "1.0"
+  },
+  "frames": [
+    {
+      "timestamp": "00:01",
+      "elapsed_time": 1.6851379871368408,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          676,
+          445,
+          360,
+          398
+        ],
+        "keyboard": [
+          679,
+          768,
+          567,
+          303
+        ],
+        "tv": [
+          988,
+          208,
+          292,
+          419
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9282048940658569,
+        "keyboard": 0.8838707804679871,
+        "tv": 0.7777683138847351
+      },
+      "frame_id": "53e07ba3",
+      "image_path": "video_insights/live_session_20250412_200648/images/53e07ba3.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, external monitor (TV), and a mechanical keyboard. Both the laptop and monitor are powered on; the laptop displays a screen with open applications, while the monitor displays programming code. The keyboard is connected to the laptop, possibly via a wired connection. There is a likely connection between the laptop and monitor, possibly HDMI or another form of video connection.",
+        "timestamp": "2025-04-12T20:06:54.765338"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.317047119140625,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          746,
+          455,
+          360,
+          373
+        ],
+        "keyboard": [
+          771,
+          791,
+          481,
+          256
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9091067314147949,
+        "keyboard": 0.6376549005508423
+      },
+      "frame_id": "de35e2a7",
+      "image_path": "video_insights/live_session_20250412_200648/images/de35e2a7.jpg",
+      "llm_description": {
+        "description": "The image shows a laptop and an external keyboard. The laptop is powered on, displaying a screen with what appears to be a website or application interface. There is no visible wired connection between the laptop and the keyboard, suggesting it may be wireless; however, a cable is visible running towards the laptop, possibly for power or other peripherals. The external keyboard appears to be lit, suggesting it is powered on, likely in use or ready for use.",
+        "timestamp": "2025-04-12T20:06:58.422457"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.950628995895386,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          743,
+          523,
+          360,
+          376
+        ],
+        "keyboard": [
+          772,
+          868,
+          504,
+          188
+        ],
+        "tv": [
+          993,
+          333,
+          285,
+          380
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9043784141540527,
+        "keyboard": 0.6837555766105652,
+        "tv": 0.8829915523529053
+      },
+      "frame_id": "bdc861ef",
+      "image_path": "video_insights/live_session_20250412_200648/images/bdc861ef.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, an external monitor, and a keyboard. Both the laptop and the monitor are powered on, displaying content that appears to be part of a screen mirroring or sharing setup with repeating images. The laptop is likely connected to the monitor via a cable for extended display functionality. A mechanical keyboard is connected to the setup, presumably via a wired connection, as suggested by the visible keycaps and the position relative to the laptop.",
+        "timestamp": "2025-04-12T20:06:58.423455"
+      }
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.485244035720825,
+      "objects": [
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "tv": [
+          808,
+          330,
+          420,
+          409
+        ],
+        "keyboard": [
+          678,
+          914,
+          319,
+          161
+        ]
+      },
+      "confidence": {
+        "tv": 0.789277970790863,
+        "keyboard": 0.5503376722335815
+      },
+      "frame_id": "ad6eb5c4",
+      "image_path": "video_insights/live_session_20250412_200648/images/ad6eb5c4.jpg",
+      "llm_description": {
+        "description": "The image shows a computer monitor and a keyboard. The monitor is powered on, displaying a desktop interface with folders and a background image visible. The keyboard is placed in front of the monitor, likely connected via cable or wireless, although specific connection details are not visible. No additional peripherals are clearly shown in the frame.",
+        "timestamp": "2025-04-12T20:06:58.654441"
+      }
+    },
+    {
+      "timestamp": "00:11",
+      "elapsed_time": 11.05000615119934,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          678,
+          452,
+          482,
+          551
+        ]
+      },
+      "confidence": {
+        "tv": 0.5774480700492859
+      },
+      "frame_id": "f0f580ff",
+      "image_path": "video_insights/live_session_20250412_200648/images/f0f580ff.jpg",
+      "llm_description": {
+        "description": "The image shows a desktop monitor that is powered on, displaying a desktop interface with visible icons and a background image. There appear to be no visible cables or connections directly seen connecting the monitor to other devices. No peripherals, such as a keyboard or mouse, are visible in the frame. The monitor screen is active, suggesting it is connected to a functioning computer system, but it's unclear what specific application or files are open.",
+        "timestamp": "2025-04-12T20:07:02.952249"
+      }
+    },
+    {
+      "timestamp": "00:12",
+      "elapsed_time": 12.583182096481323,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          676,
+          307,
+          473,
+          518
+        ]
+      },
+      "confidence": {
+        "tv": 0.7894961833953857
+      },
+      "frame_id": "fedc6d4f",
+      "image_path": "video_insights/live_session_20250412_200648/images/fedc6d4f.jpg",
+      "llm_description": {
+        "description": "The frame shows a computer monitor displaying a desktop interface with several applications and icons visible, indicating it's powered on. A smartphone, possibly in use, is visible in the hand of a person in the foreground, but its screen is not visible. The monitor appears to be connected to a computer or laptop, likely through a wired connection, not visible in the frame. There are no visible peripherals connected directly to the visible devices in the image.",
+        "timestamp": "2025-04-12T20:07:04.706953"
+      }
+    },
+    {
+      "timestamp": "00:14",
+      "elapsed_time": 14.184044122695923,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          676,
+          295,
+          416,
+          433
+        ]
+      },
+      "confidence": {
+        "tv": 0.7195708155632019
+      },
+      "frame_id": "ff1f6ddb",
+      "image_path": "video_insights/live_session_20250412_200648/images/ff1f6ddb.jpg",
+      "llm_description": {
+        "description": "The frame shows a desktop computer monitor that is powered on, displaying a desktop interface with icons and a window open, which could be a social media or video conferencing application. A smartphone is held in front of the screen, also powered on, with its back visible. There appear to be no visible wired connections connecting the smartphone to the other devices, suggesting possible wireless interaction. The monitor does not display any visible connections to other peripherals.",
+        "timestamp": "2025-04-12T20:07:07.350309"
+      }
+    },
+    {
+      "timestamp": "00:15",
+      "elapsed_time": 15.983718872070312,
+      "objects": [
+        "cell phone"
+      ],
+      "boxes": {
+        "cell phone": [
+          1121,
+          363,
+          137,
+          259
+        ]
+      },
+      "confidence": {
+        "cell phone": 0.44389280676841736
+      },
+      "frame_id": "bb3aaaa2",
+      "image_path": "video_insights/live_session_20250412_200648/images/bb3aaaa2.jpg",
+      "llm_description": {
+        "description": "The frame shows a powered-on cell phone with the screen displaying the time as 8:07 and notifications. Additionally, there is a computer monitor that appears to be on, showing an interface with several icons and a background image. A computer mouse is visible, likely a peripheral for the monitor, though direct connections such as cables are not distinctly visible. There are no obvious connections showing between the phone, monitor, or other devices.",
+        "timestamp": "2025-04-12T20:07:08.681589"
+      }
+    },
+    {
+      "timestamp": "00:17",
+      "elapsed_time": 17.51710605621338,
+      "objects": [
+        "mouse",
+        "tv"
+      ],
+      "boxes": {
+        "mouse": [
+          770,
+          879,
+          125,
+          108
+        ],
+        "tv": [
+          676,
+          363,
+          257,
+          427
+        ]
+      },
+      "confidence": {
+        "mouse": 0.7417884469032288,
+        "tv": 0.8510047793388367
+      },
+      "frame_id": "2920bd59",
+      "image_path": "video_insights/live_session_20250412_200648/images/2920bd59.jpg",
+      "llm_description": {
+        "description": "The visible devices include a computer mouse and a television or large monitor. The monitor is on and displaying a digital desktop interface with several application icons and a background image. The mouse is placed on a mousepad, suggesting it's connected to the computer either via a visible cable or wirelessly. The monitor is connected to a computer, likely nearby or off-screen, as indicated by the desktop interface displayed.",
+        "timestamp": "2025-04-12T20:07:10.307991"
+      }
+    },
+    {
+      "timestamp": "00:19",
+      "elapsed_time": 19.177486896514893,
+      "objects": [
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "keyboard": [
+          772,
+          766,
+          394,
+          250
+        ],
+        "laptop": [
+          869,
+          379,
+          351,
+          381
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.8649194240570068,
+        "laptop": 0.887390673160553
+      },
+      "frame_id": "12547320",
+      "image_path": "video_insights/live_session_20250412_200648/images/12547320.jpg",
+      "llm_description": {
+        "description": "The image contains a laptop and a keyboard. The laptop appears to be powered on, as indicated by visible screen content, showing a social media application interface with options for sharing, settings, and adding a title. There is no visible connection between the keyboard and the laptop, suggesting it might be wireless. No additional peripherals are visibly connected to the laptop.",
+        "timestamp": "2025-04-12T20:07:11.590424"
+      }
+    },
+    {
+      "timestamp": "00:20",
+      "elapsed_time": 20.683939218521118,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          677,
+          263,
+          210,
+          326
+        ]
+      },
+      "confidence": {
+        "tv": 0.6222344040870667
+      },
+      "frame_id": "67da7417",
+      "image_path": "video_insights/live_session_20250412_200648/images/67da7417.jpg"
+    },
+    {
+      "timestamp": "00:22",
+      "elapsed_time": 22.28477191925049,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          738,
+          548,
+          376,
+          379
+        ],
+        "keyboard": [
+          741,
+          860,
+          534,
+          215
+        ],
+        "tv": [
+          1029,
+          317,
+          248,
+          362
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9444855451583862,
+        "keyboard": 0.8849465847015381,
+        "tv": 0.7741036415100098
+      },
+      "frame_id": "394328c9",
+      "image_path": "video_insights/live_session_20250412_200648/images/394328c9.jpg"
+    },
+    {
+      "timestamp": "00:23",
+      "elapsed_time": 23.85037899017334,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          700,
+          495,
+          347,
+          399
+        ],
+        "keyboard": [
+          695,
+          813,
+          579,
+          260
+        ],
+        "tv": [
+          1059,
+          213,
+          220,
+          416
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9253773093223572,
+        "keyboard": 0.9474602341651917,
+        "tv": 0.5427239537239075
+      },
+      "frame_id": "3aad237c",
+      "image_path": "video_insights/live_session_20250412_200648/images/3aad237c.jpg"
+    }
+  ]
+}
