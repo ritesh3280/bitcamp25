@@ -43,6 +43,13 @@ analysis_status = {
     "fps": 0
 }
 
+# Global variables for live feed control
+live_feed_thread = None
+stop_live_feed = threading.Event()
+camera_id = 1
+max_api_calls = 10
+threshold = 30
+
 # Create Flask app
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -70,9 +77,25 @@ def get_latest_frame():
     """Return the latest frame as a JPEG image"""
     with frame_lock:
         if latest_frame is not None:
-            _, buffer = cv2.imencode('.jpg', latest_frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
-            return Response(buffer.tobytes(), mimetype='image/jpeg')
+            try:
+                # Print debug info
+                print(f"Sending frame: {latest_frame.shape}, type: {type(latest_frame)}")
+                
+                # Encode the frame as JPEG - adjust quality if needed
+                _, buffer = cv2.imencode('.jpg', latest_frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+                
+                # Create response with correct headers
+                response = Response(buffer.tobytes(), mimetype='image/jpeg')
+                response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+                response.headers['Pragma'] = 'no-cache'
+                response.headers['Expires'] = '0'
+                
+                return response
+            except Exception as e:
+                print(f"Error sending frame: {e}")
+                return Response(status=500)
         else:
+            print("No frame available yet")
             return Response(status=404)
 
 @app.route('/api/latest-detections', methods=['GET'])
@@ -83,8 +106,8 @@ def get_latest_detections():
 
 @app.route('/api/control', methods=['POST'])
 def control_analysis():
-    """Control the analysis (pause/resume)"""
-    global analysis_status
+    """Control the analysis (pause/resume/start/stop)"""
+    global analysis_status, live_feed_thread, stop_live_feed, camera_id, max_api_calls, threshold
     
     data = request.json
     if not data:
@@ -93,16 +116,68 @@ def control_analysis():
     command = data.get('command')
     
     if command == 'pause':
-        # Logic to pause analysis would go here
-        # For now, we'll just update the status
+        # Logic to pause analysis
         analysis_status["is_running"] = False
         return jsonify({"status": "paused"})
     
     elif command == 'resume':
-        # Logic to resume analysis would go here
-        # For now, we'll just update the status
+        # Logic to resume analysis
         analysis_status["is_running"] = True
         return jsonify({"status": "running"})
+    
+    elif command == 'start_live':
+        # Check if live feed is already running
+        if live_feed_thread and live_feed_thread.is_alive():
+            return jsonify({"status": "live_feed_already_running"})
+        
+        # Get parameters from request if provided
+        if 'camera_id' in data:
+            camera_id = data.get('camera_id')
+        if 'max_api_calls' in data:
+            max_api_calls = data.get('max_api_calls')
+        if 'threshold' in data:
+            threshold = data.get('threshold')
+        
+        # Reset stop event
+        stop_live_feed.clear()
+        
+        # Start live feed in a separate thread
+        live_feed_thread = threading.Thread(
+            target=run_live_recording_thread,
+            args=(camera_id, max_api_calls, threshold)
+        )
+        live_feed_thread.daemon = True
+        live_feed_thread.start()
+        
+        return jsonify({"status": "live_feed_started", "camera_id": camera_id})
+    
+    elif command == 'stop_live':
+        # Check if live feed is running
+        if not live_feed_thread or not live_feed_thread.is_alive():
+            return jsonify({"status": "live_feed_not_running"})
+        
+        # Signal thread to stop and reset status
+        stop_live_feed.set()
+        with frame_lock:
+            analysis_status["is_running"] = False
+        
+        # Wait for thread to finish (with timeout)
+        live_feed_thread.join(timeout=3.0)
+        
+        # Release OpenCV windows
+        cv2.destroyAllWindows()
+        
+        # Clean up status
+        with frame_lock:
+            global latest_frame
+            latest_frame = None  # Clear the latest frame to avoid showing stale images
+            latest_detections.clear()
+            analysis_status["frame_count"] = 0
+            analysis_status["unique_frames"] = 0
+            analysis_status["elapsed_time"] = 0
+            analysis_status["start_time"] = None
+        
+        return jsonify({"status": "live_feed_stopped"})
     
     else:
         return jsonify({"error": f"Unknown command: {command}"}), 400
@@ -278,12 +353,70 @@ def get_frame_image(frame_id):
         print(f"Error getting frame image: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/cameras/check', methods=['POST'])
+def check_camera():
+    """Check if a camera is available and can be accessed"""
+    data = request.json
+    if not data:
+        return jsonify({"error": "Invalid request"}), 400
+
+    camera_id = data.get('camera_id', 0)
+    
+    try:
+        # Try to initialize the camera
+        cap = cv2.VideoCapture(camera_id)
+        
+        if not cap.isOpened():
+            return jsonify({
+                "available": False,
+                "error": f"Camera {camera_id} could not be opened"
+            })
+        
+        # Try to read a frame to make sure it works
+        ret, frame = cap.read()
+        
+        if not ret or frame is None:
+            cap.release()
+            return jsonify({
+                "available": False,
+                "error": f"Camera {camera_id} could not capture frames"
+            })
+        
+        # Get camera properties
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        
+        # Release the camera
+        cap.release()
+        
+        return jsonify({
+            "available": True,
+            "camera_id": camera_id,
+            "resolution": f"{width}x{height}",
+            "fps": fps
+        })
+        
+    except Exception as e:
+        return jsonify({
+            "available": False,
+            "error": f"Error checking camera: {str(e)}"
+        })
+
 def update_latest_frame(frame, detections):
     """Update the latest frame and detections for HTTP API"""
     global latest_frame, latest_detections
     
     with frame_lock:
-        latest_frame = frame.copy()
+        # Store the frame for HTTP API
+        if frame is not None:
+            try:
+                # Create a copy to avoid reference issues
+                latest_frame = frame.copy()
+            except Exception as e:
+                print(f"Error copying frame: {e}")
+                # Fallback if copy fails
+                latest_frame = frame
         
         # Convert detections to a serializable format
         serializable_detections = []
@@ -306,6 +439,40 @@ def update_analysis_status(frame_count, unique_frames=None, fps=None):
             analysis_status["unique_frames"] = unique_frames
         if fps is not None:
             analysis_status["fps"] = fps
+
+def run_live_recording_thread(camera_id=1, max_api_calls=10, threshold=30):
+    """Wrapper function to run live recording in a thread with stop event"""
+    global latest_frame, latest_detections
+    
+    try:
+        run_live_recording(camera_id, max_api_calls, threshold)
+    except Exception as e:
+        print(f"Error in live recording thread: {e}")
+    finally:
+        # Reset stop event
+        stop_live_feed.clear()
+        
+        # Clean up any remaining resources
+        cv2.destroyAllWindows()
+        
+        # Clean up the frame data
+        with frame_lock:
+            # Clear the latest frame
+            if latest_frame is not None:
+                latest_frame = None
+            
+            # Clear all detections
+            latest_detections.clear()
+        
+        # Ensure analysis status is properly reset
+        global analysis_status
+        with frame_lock:
+            analysis_status["is_running"] = False
+            if analysis_status["start_time"]:
+                analysis_status["elapsed_time"] = time.time() - analysis_status["start_time"]
+            analysis_status["start_time"] = None
+            analysis_status["frame_count"] = 0
+            analysis_status["unique_frames"] = 0
 
 def run_live_recording(camera_id=1, max_api_calls=10, threshold=30):
     """Run the live camera/screen recording and analysis mode"""
@@ -372,6 +539,10 @@ def run_live_recording(camera_id=1, max_api_calls=10, threshold=30):
     
     # Modified get_frame function to update latest frame for HTTP API
     def get_frame_with_http(cap, fps_data, yolo_model, frame_counter, tracker, deduplicator, llm_processor, start_time):
+        # Check if we should stop
+        if stop_live_feed.is_set():
+            return False
+        
         # If analysis is paused, we'll just return True without processing
         if not analysis_status["is_running"]:
             time.sleep(0.1)  # Small sleep to avoid excessive CPU usage
@@ -479,12 +650,23 @@ def run_live_recording(camera_id=1, max_api_calls=10, threshold=30):
             fps if fps > 0 else None
         )
         
-        cv2.imshow("YOLO Detection", display_frame)
+        # Only show OpenCV window when NOT started via API (when started from command line)
+        # This prevents the local window from opening when controlled from the web UI
+        if stop_live_feed.is_set():  # If this is set, we're being stopped via API
+            # Don't show any windows when running via API
+            pass
+        else:
+            # Only show OpenCV window when started from command line (not via API)
+            # We can determine this by checking if we're in the main thread (not a daemon thread)
+            if not threading.current_thread().daemon:
+                cv2.imshow("YOLO Detection", display_frame)
+                key = cv2.waitKey(100) 
+                if key == ord('q'):
+                    return False
         
-        # Wait for 100ms and check if 'q' key was pressed
-        key = cv2.waitKey(100) 
-        if key == ord('q'):
-            return False
+        # Add a small sleep to control frame rate
+        time.sleep(0.01)  # Small sleep to avoid consuming too much CPU
+        
         return True
     
     try:
@@ -566,18 +748,25 @@ def main():
         print(f"  - GET  /api/status               : Current analysis status")
         print(f"  - GET  /api/latest-frame         : Latest frame as JPEG")
         print(f"  - GET  /api/latest-detections    : Latest detections")
-        print(f"  - POST /api/control              : Control analysis (pause/resume)")
+        print(f"  - POST /api/control              : Control analysis (pause/resume/start_live/stop_live)")
         print(f"  - GET  /api/sessions             : List all sessions")
         print(f"  - GET  /api/sessions/<id>        : Get session details")
         print(f"  - GET  /api/sessions/<id>/frames : Get frames for a session")
         print(f"  - GET  /api/frames/<id>/image    : Get frame image")
+        print(f"  - POST /api/cameras/check         : Check camera availability")
         
         if args.live:
-            # Run live recording mode
+            # Set global variables
+            global camera_id, max_api_calls, threshold
+            camera_id = args.camera
+            max_api_calls = args.max_calls
+            threshold = args.threshold
+            
+            # Run live recording mode directly
             run_live_recording(
-                camera_id=args.camera,
-                max_api_calls=args.max_calls,
-                threshold=args.threshold
+                camera_id=camera_id,
+                max_api_calls=max_api_calls,
+                threshold=threshold
             )
             
         elif args.video:
@@ -599,6 +788,8 @@ def main():
             # Just run the Flask server
             print("\n--- Running Flask server only mode ---")
             print("Press Ctrl+C to exit")
+            print("\nTo start live recording via API, send POST to /api/control with:")
+            print('{"command": "start_live", "camera_id": 0}')
             # Keep the main thread alive to allow the Flask thread to run
             while True:
                 time.sleep(1)

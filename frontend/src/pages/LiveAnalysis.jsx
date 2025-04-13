@@ -7,11 +7,13 @@ import {
   FiPlay,
   FiRefreshCw,
   FiInfo,
-  FiWifi,
   FiWifiOff,
+  FiPower,
+  FiSquare,
 } from "react-icons/fi";
+import api from "../services/api"; // Import the API service
 
-// Mock data for development - replace with real WebSocket or API data
+// Mock data for development - replace with real API data
 const MOCK_DETECTIONS = [
   { id: 1, timestamp: "10:45:23", label: "USB Drive", confidence: 0.98 },
   { id: 2, timestamp: "10:45:22", label: "Person", confidence: 0.95 },
@@ -23,7 +25,7 @@ const MOCK_DETECTIONS = [
 const FORENSIC_KEYWORDS = ["usb", "drive", "monitor", "storage", "device"];
 
 // API endpoints
-const API_BASE_URL = "http://localhost:5000/api";
+// const API_BASE_URL = "http://localhost:5000/api";
 
 const DetectionItem = ({ timestamp, label, confidence }) => {
   const isForensicItem = FORENSIC_KEYWORDS.some((keyword) =>
@@ -76,9 +78,6 @@ const DetectionItem = ({ timestamp, label, confidence }) => {
 
 const LiveAnalysis = () => {
   const [detections, setDetections] = useState(MOCK_DETECTIONS);
-  const [isVideoActive, setIsVideoActive] = useState(true);
-  const [isConnected, setIsConnected] = useState(false);
-  const [usingFallback, setUsingFallback] = useState(false);
   const [fps, setFps] = useState(0);
   const [resolution, setResolution] = useState("Loading...");
   const [analysisStatus, setAnalysisStatus] = useState({
@@ -89,117 +88,107 @@ const LiveAnalysis = () => {
     current_detections: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isLiveFeedRunning, setIsLiveFeedRunning] = useState(false);
 
   const imageRef = useRef(null);
-  const wsRef = useRef(null);
   const frameCountRef = useRef(0);
   const lastTimeRef = useRef(Date.now());
   const statusIntervalRef = useRef(null);
-  const fallbackIntervalRef = useRef(null);
+  const frameIntervalRef = useRef(null);
 
-  // Fetch latest frame via HTTP API (fallback method)
-  const fetchLatestFrameViaHttp = async () => {
-    if (!isVideoActive) return;
+  // Fetch latest frame via HTTP API
+  const fetchLatestFrame = async () => {
+    // Only fetch frames if the live feed is running
+    if (!isLiveFeedRunning) return;
 
     try {
-      // Fetch latest frame as a blob
-      const response = await fetch(`${API_BASE_URL}/latest-frame`);
-      if (response.ok) {
-        const blob = await response.blob();
-        const imageUrl = URL.createObjectURL(blob);
+      // Generate a URL with a timestamp to prevent caching
+      const imageUrl = api.getLatestFrameUrl();
+      console.log("Fetching image from:", imageUrl);
 
+      // Create a new image element to force reload
+      const img = new Image();
+
+      // Set up onload handler before setting src
+      img.onload = () => {
+        console.log(
+          "Image loaded successfully, dimensions:",
+          img.width,
+          "x",
+          img.height
+        );
+
+        // Update the display image
         if (imageRef.current) {
-          imageRef.current.src = imageUrl;
+          imageRef.current.src = img.src;
 
-          // Update resolution when first frame is received
+          // Update resolution when we first get an image
           if (!resolution || resolution === "Loading...") {
-            imageRef.current.onload = () => {
-              if (imageRef.current) {
-                setResolution(
-                  `${imageRef.current.naturalWidth}x${imageRef.current.naturalHeight}`
-                );
-              }
-            };
-          }
-
-          // Calculate and update FPS
-          frameCountRef.current++;
-          const now = Date.now();
-          const elapsed = now - lastTimeRef.current;
-
-          if (elapsed >= 1000) {
-            // Update FPS every second
-            setFps(Math.round((frameCountRef.current * 1000) / elapsed));
-            frameCountRef.current = 0;
-            lastTimeRef.current = now;
+            setResolution(`${img.width}x${img.height}`);
           }
         }
 
-        // Also fetch latest detections
-        const detectionsResponse = await fetch(
-          `${API_BASE_URL}/latest-detections`
-        );
-        if (detectionsResponse.ok) {
-          const detectionsData = await detectionsResponse.json();
+        // Calculate and update FPS
+        frameCountRef.current++;
+        const now = Date.now();
+        const elapsed = now - lastTimeRef.current;
+
+        if (elapsed >= 1000) {
+          // Update FPS every second
+          const currentFps = Math.round(
+            (frameCountRef.current * 1000) / elapsed
+          );
+          console.log("FPS calculated:", currentFps);
+          setFps(currentFps);
+          frameCountRef.current = 0;
+          lastTimeRef.current = now;
+        }
+      };
+
+      img.onerror = (error) => {
+        console.error("Failed to load image:", error);
+      };
+
+      // Set the src to start loading the image
+      img.src = imageUrl;
+
+      // Also fetch latest detections using the API service (less frequently)
+      if (frameCountRef.current % 3 === 0) {
+        try {
+          const detectionsData = await api.getLatestDetections();
 
           if (detectionsData && detectionsData.length > 0) {
+            console.log("Got detections:", detectionsData.length);
             const timestamp = new Date().toLocaleTimeString();
 
             const newDetections = detectionsData.map((det) => ({
-              id: Date.now() + Math.random(), // Generate unique ID
+              id: Date.now() + Math.random(),
               timestamp: timestamp,
               label: det.label,
               confidence: det.confidence,
             }));
 
             setDetections((prev) => {
-              // Combine new detections with previous ones, limit to 10
               const combined = [...newDetections, ...prev];
               return combined.slice(0, 10);
             });
           }
+        } catch (detectionsError) {
+          console.error("Error fetching latest detections:", detectionsError);
         }
       }
     } catch (error) {
-      console.error("Error fetching latest frame via HTTP:", error);
+      console.error("Error in fetchLatestFrame:", error);
     }
   };
 
   // Fetch analysis status from API
   const fetchAnalysisStatus = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/status`);
-      if (response.ok) {
-        const data = await response.json();
-        setAnalysisStatus(data);
-      }
+      const data = await api.getStatus();
+      setAnalysisStatus(data);
     } catch (error) {
       console.error("Error fetching analysis status:", error);
-    }
-  };
-
-  // Control analysis (pause/resume)
-  const controlAnalysis = async (command) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${API_BASE_URL}/control`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ command }),
-      });
-
-      if (response.ok) {
-        // Refresh status after control
-        await fetchAnalysisStatus();
-      } else {
-        console.error("Error controlling analysis:", await response.text());
-      }
-    } catch (error) {
-      console.error("Error controlling analysis:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -212,278 +201,178 @@ const LiveAnalysis = () => {
       .padStart(2, "0")}`;
   };
 
-  // Periodically fetch analysis status
+  // Set up intervals to fetch status and frames
   useEffect(() => {
+    // Initial data fetch
     fetchAnalysisStatus();
 
-    // Set up interval to fetch status every 2 seconds
+    // Set up status interval - check every 2 seconds
     statusIntervalRef.current = setInterval(fetchAnalysisStatus, 2000);
 
+    // Check if live feed is already running on mount
+    const checkInitialStatus = async () => {
+      try {
+        const status = await api.getStatus();
+
+        // If there's activity, consider the feed as running
+        const isActive = status.frame_count > 0 || status.is_running;
+        setIsLiveFeedRunning(isActive);
+
+        // If active, start the frame fetching
+        if (isActive && !frameIntervalRef.current) {
+          console.log("Feed already active, starting frame fetching");
+          frameIntervalRef.current = setInterval(fetchLatestFrame, 50);
+        }
+      } catch (error) {
+        console.error("Error checking initial status:", error);
+      }
+    };
+
+    checkInitialStatus();
+
+    // Cleanup on unmount
     return () => {
+      console.log("Component unmounting, cleaning up intervals");
+
       if (statusIntervalRef.current) {
         clearInterval(statusIntervalRef.current);
+        statusIntervalRef.current = null;
+      }
+
+      if (frameIntervalRef.current) {
+        clearInterval(frameIntervalRef.current);
+        frameIntervalRef.current = null;
+      }
+
+      // Release any object URLs we've created
+      if (imageRef.current && imageRef.current.src) {
+        URL.revokeObjectURL(imageRef.current.src);
       }
     };
   }, []);
 
-  // Connect to WebSocket server
+  // Watch for live feed status changes to control frame fetching
   useEffect(() => {
-    let reconnectTimer = null;
-    let reconnectAttempts = 0;
-    const MAX_RECONNECT_ATTEMPTS = 5; // Reduced from 10 to switch to fallback mode faster
-    const INITIAL_RECONNECT_DELAY = 1000;
-    const MAX_MESSAGE_ERRORS = 3;
-    let messageErrorCount = 0;
+    console.log("Live feed status changed:", isLiveFeedRunning);
 
-    // WebSocket setup
-    const connectWebSocket = () => {
-      try {
-        console.log("Attempting to connect to WebSocket server...");
+    if (isLiveFeedRunning) {
+      // Start fetching frames when live feed starts
+      if (!frameIntervalRef.current) {
+        console.log("Starting frame interval");
+        frameIntervalRef.current = setInterval(fetchLatestFrame, 50); // 20 FPS
 
-        // Close existing connection if any
-        if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
-          wsRef.current.close();
-        }
-
-        // Create new WebSocket connection
-        const ws = new WebSocket("ws://localhost:8765");
-        wsRef.current = ws;
-
-        // Connection opened
-        ws.onopen = () => {
-          console.log("WebSocket connection established");
-          setIsConnected(true);
-          setUsingFallback(false);
-          reconnectAttempts = 0; // Reset reconnect attempts on successful connection
-          messageErrorCount = 0; // Reset message error count
-
-          // Clear fallback interval if it exists
-          if (fallbackIntervalRef.current) {
-            clearInterval(fallbackIntervalRef.current);
-            fallbackIntervalRef.current = null;
-          }
-
-          // Send a ping every 20 seconds to keep the connection alive
-          const pingInterval = setInterval(() => {
-            if (ws && ws.readyState === WebSocket.OPEN) {
-              try {
-                ws.send(JSON.stringify({ type: "ping" }));
-              } catch (err) {
-                console.warn("Failed to send ping:", err);
-                clearInterval(pingInterval);
-              }
-            } else {
-              clearInterval(pingInterval);
-            }
-          }, 20000);
-
-          // Store the interval so we can clear it on cleanup
-          ws.pingInterval = pingInterval;
-        };
-
-        // Connection closed
-        ws.onclose = (event) => {
-          console.log(
-            `WebSocket connection closed: Code: ${event.code}, Reason: ${
-              event.reason || "No reason provided"
-            }`
-          );
-          setIsConnected(false);
-
-          // Clear ping interval if it exists
-          if (ws.pingInterval) {
-            clearInterval(ws.pingInterval);
-          }
-
-          // Start fallback method after a few failed attempts or immediately if code 1011 (server error)
-          const shouldUseFallback =
-            reconnectAttempts >= 2 || event.code === 1011;
-
-          if (shouldUseFallback && !fallbackIntervalRef.current) {
-            console.log("Starting fallback HTTP method for frame updates");
-            setUsingFallback(true);
-            fallbackIntervalRef.current = setInterval(
-              fetchLatestFrameViaHttp,
-              500
-            );
-          }
-
-          // Only attempt to reconnect if we haven't exceeded the max attempts
-          if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-            const delay = Math.min(
-              INITIAL_RECONNECT_DELAY * Math.pow(1.5, reconnectAttempts),
-              10000 // Max 10 seconds between retries
-            );
-            console.log(
-              `Attempting to reconnect in ${delay / 1000} seconds...`
-            );
-
-            reconnectTimer = setTimeout(() => {
-              reconnectAttempts++;
-              connectWebSocket();
-            }, delay);
-          } else {
-            console.warn(
-              "Max reconnection attempts reached. Using HTTP fallback only."
-            );
-            // Ensure fallback is active
-            if (!fallbackIntervalRef.current) {
-              setUsingFallback(true);
-              fallbackIntervalRef.current = setInterval(
-                fetchLatestFrameViaHttp,
-                500
-              );
-            }
-          }
-        };
-
-        // Error handling
-        ws.onerror = (error) => {
-          // Just log the error - onclose will be called after this
-          console.error("WebSocket error occurred");
-        };
-
-        // Message handling
-        ws.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-
-            // Handle connection confirmation message
-            if (data.status === "connected") {
-              console.log("Server connection confirmed:", data.message);
-              return;
-            }
-
-            // Update the image with the received frame
-            if (data.frame && imageRef.current) {
-              imageRef.current.src = `data:image/jpeg;base64,${data.frame}`;
-
-              // Update resolution when first frame is received
-              if (!resolution || resolution === "Loading...") {
-                imageRef.current.onload = () => {
-                  if (imageRef.current) {
-                    setResolution(
-                      `${imageRef.current.naturalWidth}x${imageRef.current.naturalHeight}`
-                    );
-                  }
-                };
-              }
-
-              // Calculate and update FPS
-              frameCountRef.current++;
-              const now = Date.now();
-              const elapsed = now - lastTimeRef.current;
-
-              if (elapsed >= 1000) {
-                // Update FPS every second
-                setFps(Math.round((frameCountRef.current * 1000) / elapsed));
-                frameCountRef.current = 0;
-                lastTimeRef.current = now;
-              }
-            }
-
-            // Update detections list
-            if (data.detections && data.detections.length > 0) {
-              const timestamp = new Date().toLocaleTimeString();
-
-              const newDetections = data.detections.map((det) => ({
-                id: Date.now() + Math.random(), // Generate unique ID
-                timestamp: timestamp,
-                label: det.label,
-                confidence: det.confidence,
-              }));
-
-              setDetections((prev) => {
-                // Combine new detections with previous ones, limit to 10
-                const combined = [...newDetections, ...prev];
-                return combined.slice(0, 10);
-              });
-            }
-
-            // Reset error count on successful message processing
-            messageErrorCount = 0;
-          } catch (error) {
-            console.error("Error parsing WebSocket message:", error);
-            messageErrorCount++;
-
-            // If we have too many message errors in a row, close and reconnect
-            if (
-              messageErrorCount >= MAX_MESSAGE_ERRORS &&
-              ws.readyState === WebSocket.OPEN
-            ) {
-              console.warn("Too many message errors, reconnecting...");
-              ws.close(3000, "Too many message errors");
-            }
-          }
-        };
-      } catch (error) {
-        console.error("Error setting up WebSocket:", error);
-        setIsConnected(false);
-
-        // Start fallback method after a few failed attempts
-        if (reconnectAttempts >= 2 && !fallbackIntervalRef.current) {
-          console.log(
-            "Starting fallback HTTP method for frame updates due to setup error"
-          );
-          setUsingFallback(true);
-          fallbackIntervalRef.current = setInterval(
-            fetchLatestFrameViaHttp,
-            500
-          );
-        }
-
-        // Attempt to reconnect on error
-        if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-          const delay = Math.min(
-            INITIAL_RECONNECT_DELAY * Math.pow(1.5, reconnectAttempts),
-            10000 // Max 10 seconds between retries
-          );
-          reconnectTimer = setTimeout(() => {
-            reconnectAttempts++;
-            connectWebSocket();
-          }, delay);
-        } else if (!fallbackIntervalRef.current) {
-          // Ensure fallback is active
-          setUsingFallback(true);
-          fallbackIntervalRef.current = setInterval(
-            fetchLatestFrameViaHttp,
-            500
-          );
-        }
+        // Fetch one frame immediately
+        fetchLatestFrame();
       }
-    };
+    } else {
+      // Stop fetching frames when live feed stops
+      if (frameIntervalRef.current) {
+        console.log("Stopping frame interval");
+        clearInterval(frameIntervalRef.current);
+        frameIntervalRef.current = null;
+      }
+    }
+  }, [isLiveFeedRunning]);
 
-    // Initial connection
-    connectWebSocket();
+  // Start the live feed
+  const startLiveFeed = async () => {
+    setIsLoading(true);
+    try {
+      console.log("Starting live feed...");
 
-    // Clean up WebSocket connection and timers
-    return () => {
-      if (reconnectTimer) {
-        clearTimeout(reconnectTimer);
+      // First check if the camera is available
+      const cameraCheck = await api.checkCamera(0);
+      console.log("Camera check result:", cameraCheck);
+
+      if (!cameraCheck.available) {
+        console.error("Camera not available:", cameraCheck.error);
+        alert(`Camera not available: ${cameraCheck.error || "Unknown error"}`);
+        setIsLoading(false);
+        return;
       }
 
-      if (fallbackIntervalRef.current) {
-        clearInterval(fallbackIntervalRef.current);
-        fallbackIntervalRef.current = null;
-      }
+      // Camera is available, start the live feed
+      const response = await api.startLiveFeed({ camera_id: 0 });
+      console.log("Start live feed response:", response);
 
-      if (wsRef.current) {
-        // Clear ping interval if it exists
-        if (wsRef.current.pingInterval) {
-          clearInterval(wsRef.current.pingInterval);
+      if (response && response.status === "live_feed_started") {
+        console.log("Live feed started successfully");
+        setIsLiveFeedRunning(true);
+
+        // Update resolution if available from camera check
+        if (cameraCheck.resolution) {
+          setResolution(cameraCheck.resolution);
         }
 
-        try {
-          if (wsRef.current.readyState === WebSocket.OPEN) {
-            wsRef.current.close();
+        // Ensure we're fetching frames by triggering one fetch immediately
+        fetchLatestFrame();
+
+        // Refresh status
+        await fetchAnalysisStatus();
+
+        // Force a small delay to ensure the backend is ready
+        setTimeout(() => {
+          if (!frameIntervalRef.current) {
+            console.log("Setting up frame interval after delay");
+            frameIntervalRef.current = setInterval(fetchLatestFrame, 50);
           }
-        } catch (err) {
-          console.warn("Error closing WebSocket:", err);
-        }
-        wsRef.current = null;
+        }, 500);
+      } else {
+        console.error("Failed to start live feed:", response);
+        alert("Failed to start live feed. See console for details.");
       }
-    };
-  }, []);
+    } catch (error) {
+      console.error("Error starting live feed:", error);
+      alert(`Error starting live feed: ${error.message || "Unknown error"}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Stop the live feed
+  const stopLiveFeed = async () => {
+    setIsLoading(true);
+    try {
+      console.log("Stopping live feed...");
+
+      // Stop the live feed
+      const response = await api.stopLiveFeed();
+      console.log("Stop live feed response:", response);
+
+      if (response && response.status === "live_feed_stopped") {
+        console.log("Live feed stopped successfully");
+        setIsLiveFeedRunning(false);
+
+        // Reset UI state
+        setDetections([]); // Clear existing detections
+        setFps(0); // Reset FPS counter
+
+        // Clear the image source
+        if (imageRef.current) {
+          console.log("Clearing image source");
+          imageRef.current.src = ""; // Clear the image
+        }
+
+        // Make sure video display is stopped
+        if (frameIntervalRef.current) {
+          console.log("Clearing frame interval");
+          clearInterval(frameIntervalRef.current);
+          frameIntervalRef.current = null;
+        }
+
+        // Refresh status to make sure UI reflects correct state
+        await fetchAnalysisStatus();
+      } else {
+        console.error("Failed to stop live feed:", response);
+        alert("Failed to stop live feed. See console for details.");
+      }
+    } catch (error) {
+      console.error("Error stopping live feed:", error);
+      alert(`Error stopping live feed: ${error.message || "Unknown error"}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -516,7 +405,7 @@ const LiveAnalysis = () => {
               <div>
                 <h3 className="text-sm font-medium">Analysis Status</h3>
                 <p className="text-xs text-gray-500">
-                  {analysisStatus.is_running ? "Running" : "Paused"}
+                  {analysisStatus.is_running ? "Running" : "Stopped"}
                 </p>
               </div>
             </div>
@@ -544,31 +433,38 @@ const LiveAnalysis = () => {
           </div>
 
           <div className="flex space-x-2">
-            <button
-              onClick={() =>
-                controlAnalysis(analysisStatus.is_running ? "pause" : "resume")
-              }
-              disabled={isLoading}
-              className={`px-3 py-1 rounded-md text-sm flex items-center gap-1 ${
-                analysisStatus.is_running
-                  ? "bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
-                  : "bg-green-50 text-green-700 hover:bg-green-100"
-              } transition-colors`}
-            >
-              {isLoading ? (
-                <FiRefreshCw className="w-4 h-4 animate-spin" />
-              ) : analysisStatus.is_running ? (
-                <>
-                  <FiPause className="w-4 h-4" />
-                  <span>Pause</span>
-                </>
-              ) : (
-                <>
-                  <FiPlay className="w-4 h-4" />
-                  <span>Resume</span>
-                </>
-              )}
-            </button>
+            {/* Start/Stop Live Feed Buttons */}
+            {isLiveFeedRunning ? (
+              <button
+                onClick={stopLiveFeed}
+                disabled={isLoading}
+                className="px-3 py-1 rounded-md text-sm flex items-center gap-1 bg-red-50 text-red-700 hover:bg-red-100 transition-colors"
+              >
+                {isLoading ? (
+                  <FiRefreshCw className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <FiSquare className="w-4 h-4" />
+                    <span>Stop Feed</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={startLiveFeed}
+                disabled={isLoading}
+                className="px-3 py-1 rounded-md text-sm flex items-center gap-1 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
+              >
+                {isLoading ? (
+                  <FiRefreshCw className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <FiPower className="w-4 h-4" />
+                    <span>Start Feed</span>
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -589,51 +485,44 @@ const LiveAnalysis = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
-                    <div
-                      className={`w-2 h-2 ${
-                        isConnected
-                          ? "bg-red-500 animate-pulse"
-                          : usingFallback
-                          ? "bg-yellow-500"
-                          : "bg-gray-400"
-                      } rounded-full`}
-                    ></div>
-                    <span
-                      className={`text-xs font-medium ${
-                        isConnected
-                          ? "text-red-500"
-                          : usingFallback
-                          ? "text-yellow-500"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {isConnected
-                        ? "LIVE (WebSocket)"
-                        : usingFallback
-                        ? "LIVE (HTTP Fallback)"
-                        : "DISCONNECTED"}
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span className="text-xs font-medium text-yellow-500">
+                      LIVE (HTTP API)
                     </span>
-                    {isConnected ? (
-                      <FiWifi className="w-3 h-3 text-green-500" />
-                    ) : (
-                      <FiWifiOff className="w-3 h-3 text-gray-400" />
-                    )}
+                    <FiWifiOff className="w-3 h-3 text-gray-400" />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Video Player - Replaced with WebSocket stream */}
+            {/* Video Player */}
             <div className="aspect-video bg-gray-900 relative">
               <img
                 ref={imageRef}
                 alt="YOLO Detection Feed"
                 className="w-full h-full object-contain"
-                style={{ display: isVideoActive ? "block" : "none" }}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  display: isLiveFeedRunning ? "block" : "none",
+                }}
+                onLoad={(e) => {
+                  // Update resolution when first frame is loaded
+                  if (!resolution || resolution === "Loading...") {
+                    setResolution(
+                      `${e.target.naturalWidth}x${e.target.naturalHeight}`
+                    );
+                  }
+                  // Log successful load
+                  console.log("Image displayed successfully");
+                }}
+                onError={(e) => {
+                  console.error("Error displaying image:", e);
+                }}
               />
-              {!isVideoActive && (
+              {!isLiveFeedRunning && (
                 <div className="absolute inset-0 flex items-center justify-center text-white">
-                  <p>Video paused</p>
+                  <p>Live feed is not active. Click "Start Feed" to begin.</p>
                 </div>
               )}
 
@@ -641,20 +530,20 @@ const LiveAnalysis = () => {
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
                 <div className="flex items-center justify-between text-white">
                   <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => setIsVideoActive(!isVideoActive)}
-                      className="p-2 hover:bg-white/20 rounded-full transition-colors"
-                    >
-                      {isVideoActive ? (
+                    {/* Replace play/pause button with status indicator */}
+                    <div className="flex items-center gap-2">
+                      {isLiveFeedRunning ? (
                         <>
-                          <FiPause className="w-4 h-4" /> Pause
+                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                          <span className="text-sm">Live Feed Active</span>
                         </>
                       ) : (
                         <>
-                          <FiPlay className="w-4 h-4" /> Play
+                          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                          <span className="text-sm">Feed Inactive</span>
                         </>
                       )}
-                    </button>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <span className="px-2 py-1 bg-white/20 rounded">
@@ -663,11 +552,9 @@ const LiveAnalysis = () => {
                     <span className="px-2 py-1 bg-white/20 rounded">
                       {fps} FPS
                     </span>
-                    {usingFallback && (
-                      <span className="px-2 py-1 bg-yellow-500/70 rounded text-xs">
-                        Fallback Mode
-                      </span>
-                    )}
+                    <span className="px-2 py-1 bg-yellow-500/70 rounded text-xs">
+                      HTTP API (20 FPS)
+                    </span>
                   </div>
                 </div>
               </div>

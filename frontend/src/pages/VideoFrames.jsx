@@ -7,8 +7,18 @@ import {
   FiClock,
   FiFilter,
   FiSend,
+  FiFolder,
+  FiChevronRight,
+  FiCamera,
+  FiRefreshCw,
+  FiCheckCircle,
+  FiAlertCircle,
 } from "react-icons/fi";
 import api from "../services/api";
+
+// Get API_BASE_URL from the environment or use default
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 // Mock data for development
 const MOCK_FRAMES = [
@@ -51,11 +61,19 @@ const FrameModal = ({ frame, onClose }) => {
           </button>
         </div>
         <div className="p-4">
-          <img
-            src={frame.thumbnail}
-            alt={`Frame ${frame.id}`}
-            className="w-full h-auto rounded-lg"
-          />
+          <div className="relative">
+            <img
+              src={frame.thumbnail}
+              alt={`Frame ${frame.id}`}
+              className="w-full h-auto rounded-lg"
+              onError={(e) => {
+                console.error("Error loading image:", e);
+                e.target.src =
+                  "https://placehold.co/600x400?text=Image+Not+Found";
+                e.target.alt = "Image failed to load";
+              }}
+            />
+          </div>
           <div className="mt-4 space-y-2">
             <p className="text-sm text-gray-500">
               <span className="font-medium text-gray-900">Frame ID:</span>{" "}
@@ -67,12 +85,41 @@ const FrameModal = ({ frame, onClose }) => {
             </p>
             <p className="text-sm text-gray-500">
               <span className="font-medium text-gray-900">Detections:</span>{" "}
-              {frame.detections.join(", ")}
+              {frame.objects ? frame.objects.join(", ") : "None"}
             </p>
             <p className="text-sm text-gray-500">
               <span className="font-medium text-gray-900">Confidence:</span>{" "}
-              {(frame.confidence * 100).toFixed(1)}%
+              {frame.confidence
+                ? `${(frame.confidence * 100).toFixed(1)}%`
+                : "N/A"}
             </p>
+
+            {frame.llm_description && (
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">
+                  AI Description:
+                </h4>
+                {frame.llm_description.description ? (
+                  <p className="text-sm text-gray-700">
+                    {frame.llm_description.description}
+                  </p>
+                ) : frame.llm_description.error ? (
+                  <p className="text-sm text-red-500">
+                    {frame.llm_description.error}
+                  </p>
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    No description generated
+                  </p>
+                )}
+                {frame.llm_description.timestamp && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    Generated at:{" "}
+                    {new Date(frame.llm_description.timestamp).toLocaleString()}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -126,7 +173,6 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
   useEffect(() => {
     if (triggerRect && popupRef.current) {
       const popup = popupRef.current;
-      const popupRect = popup.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
       const viewportWidth = window.innerWidth;
 
@@ -177,14 +223,26 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
     setIsLoading(true);
 
     try {
-      // Send the question to the API
-      const response = await api.askQuestion(frame.id, question);
+      console.log("Asking about frame:", frame.id, "Question:", question);
+
+      // For now, let's simulate a response since we might not have a real backend endpoint
+      // In a real app, uncomment the line below to use the actual API
+      // const response = await api.askQuestion(frame.id, question);
+
+      // Simulated response
+      const simulatedResponse = {
+        answer: `This is a simulated response about frame ${
+          frame.id
+        }. In this frame, I can see ${
+          frame.objects?.join(", ") || "various objects"
+        }. To get real AI responses, please connect this to a proper API endpoint.`,
+      };
 
       // Add AI response
       setMessages([
         ...newMessages,
         {
-          content: response.answer,
+          content: simulatedResponse.answer,
           isUser: false,
           timestamp: "Just now",
         },
@@ -258,6 +316,9 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
               src={frame.thumbnail}
               alt={`Frame ${frame.id}`}
               className="w-10 h-10 object-cover rounded-lg shadow-sm"
+              onError={(e) => {
+                e.target.src = "https://placehold.co/100x100?text=Frame";
+              }}
             />
             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-indigo-600 rounded-full flex items-center justify-center">
               <FiMessageSquare className="w-2.5 h-2.5 text-white" />
@@ -384,144 +445,460 @@ const AskPopup = ({ frame, onClose, triggerRect }) => {
 };
 
 const VideoFrames = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("sessions");
+  const [sessions, setSessions] = useState([]);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [sessionFrames, setSessionFrames] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedFrame, setSelectedFrame] = useState(null);
-  const [askFrame, setAskFrame] = useState(null);
-  const [askButtonRect, setAskButtonRect] = useState(null);
-  const [frames, setFrames] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [chatFrame, setChatFrame] = useState(null);
+  const [askPopupVisible, setAskPopupVisible] = useState(false);
+  const [askPopupTriggerRect, setAskPopupTriggerRect] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredFrames, setFilteredFrames] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [expandedFrameId, setExpandedFrameId] = useState(null);
 
-  // Fetch frames from the API
+  // Fetch sessions from the API
   useEffect(() => {
-    const fetchFrames = async () => {
-      try {
-        setIsLoading(true);
-        const response = await api.getFrames();
-        setFrames(response.frames);
-      } catch (error) {
-        console.error("Error fetching frames:", error);
-        setError("Failed to load frames. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFrames();
+    fetchSessions();
   }, []);
 
+  const fetchSessions = async () => {
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      // Use the API service
+      const data = await api.getSessions();
+      setSessions(data.sessions || []);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      setErrorMessage("Failed to load sessions. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch frames for a specific session
+  const fetchSessionFrames = async (sessionId) => {
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      // Use the API service
+      const data = await api.getSessionFrames(sessionId);
+      setSessionFrames(data.frames || []);
+      setFilteredFrames(data.frames || []);
+    } catch (error) {
+      console.error("Error fetching session frames:", error);
+      setErrorMessage("Failed to load frames. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle session selection
+  const handleSessionSelect = (session) => {
+    setSelectedSession(session);
+    fetchSessionFrames(session.id);
+    setActiveTab("frames");
+  };
+
+  // Handle search
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredFrames(sessionFrames);
+    } else {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      const filtered = sessionFrames.filter((frame) => {
+        // Search by objects, timestamp, or id
+        return (
+          frame.objects.some((obj) =>
+            obj.toLowerCase().includes(lowerCaseQuery)
+          ) ||
+          frame.timestamp.toLowerCase().includes(lowerCaseQuery) ||
+          frame.id.toLowerCase().includes(lowerCaseQuery)
+        );
+      });
+      setFilteredFrames(filtered);
+    }
+  }, [searchQuery, sessionFrames]);
+
   const handleAskClick = (frame, event) => {
+    console.log("Ask about frame:", frame.id);
     event.stopPropagation(); // Prevent event bubbling
-    const button = event.currentTarget;
-    const rect = button.getBoundingClientRect();
-    setAskButtonRect(rect);
-    setAskFrame(frame);
+
+    // Prepare frame with all necessary data for the chat popup
+    const frameForChat = {
+      ...frame,
+      detections: frame.objects,
+      thumbnail: api.getFrameImage(frame.id),
+    };
+
+    // Use the chatFrame state instead of selectedFrame
+    setChatFrame(frameForChat);
+    setAskPopupTriggerRect(event.currentTarget.getBoundingClientRect());
+    setAskPopupVisible(true);
+  };
+
+  const handleFrameClick = (frame) => {
+    console.log("Showing frame:", frame);
+    // Make sure we include all necessary properties for the modal
+    const frameForModal = {
+      ...frame,
+      // Convert objects to detections format if needed by FrameModal
+      detections: frame.objects,
+      thumbnail: api.getFrameImage(frame.id),
+      // Ensure llm_description is included
+      llm_description: frame.llm_description,
+    };
+    setSelectedFrame(frameForModal);
+  };
+
+  // Toggle expanded row
+  const toggleFrameDescription = (frameId) => {
+    if (expandedFrameId === frameId) {
+      setExpandedFrameId(null);
+    } else {
+      setExpandedFrameId(frameId);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Video Frames</h1>
-          <p className="mt-1 text-gray-500">
-            Review and analyze detected video frames
-          </p>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="mb-6 flex gap-4">
-          <div className="flex-1 relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search frames..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <button className="px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 flex items-center gap-2">
-            <FiFilter className="w-5 h-5" />
-            Filters
+    <div className="flex flex-col p-4 h-full">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold text-gray-900">Video Frames</h1>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={fetchSessions}
+            className="px-3 py-2 rounded-lg text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors flex items-center gap-2"
+          >
+            <FiRefreshCw className="w-4 h-4" />
+            Refresh
           </button>
-        </div>
-
-        {/* Frames List */}
-        <div className="space-y-3">
-          {isLoading ? (
-            <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-4"></div>
-              <p className="text-gray-500">Loading frames...</p>
-            </div>
-          ) : error ? (
-            <div className="bg-white rounded-lg border border-red-200 p-8 text-center">
-              <p className="text-red-500">{error}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg"
-              >
-                Retry
-              </button>
-            </div>
-          ) : frames.length === 0 ? (
-            <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-              <p className="text-gray-500">No frames found</p>
-            </div>
-          ) : (
-            frames.map((frame) => (
-              <div
-                key={frame.id}
-                className="bg-white rounded-lg border border-gray-200 hover:shadow-sm transition-shadow duration-200"
-              >
-                <div className="flex items-center p-3 gap-4">
-                  {/* Thumbnail */}
-                  <div className="w-40 flex-shrink-0">
-                    <img
-                      src={frame.thumbnail}
-                      alt={`Frame ${frame.id}`}
-                      className="w-full h-24 object-cover rounded-lg"
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                      <div>
-                        <h3 className="text-sm font-medium text-gray-900">
-                          {frame.id}
-                        </h3>
-                        <div className="mt-1 flex items-center gap-1.5 text-sm text-gray-500">
-                          <FiClock className="w-3.5 h-3.5" />
-                          {frame.timestamp}
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => setSelectedFrame(frame)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
-                        >
-                          <FiImage className="w-4 h-4" />
-                          Show Frame
-                        </button>
-                        <button
-                          onClick={(e) => handleAskClick(frame, e)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors"
-                        >
-                          <FiMessageSquare className="w-4 h-4" />
-                          Ask Anything
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
         </div>
       </div>
 
-      {/* Frame Modal */}
+      {errorMessage && (
+        <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg flex items-center gap-2">
+          <FiAlertCircle className="w-5 h-5" />
+          {errorMessage}
+        </div>
+      )}
+
+      <div className="flex mb-4 border-b border-gray-200">
+        <button
+          className={`px-4 py-2 text-sm font-medium relative ${
+            activeTab === "sessions"
+              ? "text-indigo-600 border-indigo-600"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+          onClick={() => setActiveTab("sessions")}
+        >
+          Sessions
+          {activeTab === "sessions" && (
+            <div className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></div>
+          )}
+        </button>
+        {selectedSession && (
+          <button
+            className={`px-4 py-2 text-sm font-medium relative ${
+              activeTab === "frames"
+                ? "text-indigo-600 border-indigo-600"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+            onClick={() => setActiveTab("frames")}
+          >
+            Frames
+            {activeTab === "frames" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></div>
+            )}
+          </button>
+        )}
+      </div>
+
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        </div>
+      ) : (
+        <div className="flex-1 overflow-hidden flex flex-col">
+          {activeTab === "sessions" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
+              {sessions.length === 0 ? (
+                <div className="col-span-3 py-16 flex flex-col items-center justify-center text-gray-500">
+                  <FiFolder className="w-12 h-12 mb-4 opacity-50" />
+                  <p className="text-lg font-medium mb-1">No Sessions Found</p>
+                  <p className="text-sm">
+                    Run a video analysis first to create a session.
+                  </p>
+                </div>
+              ) : (
+                sessions.map((session) => (
+                  <div
+                    key={session.id}
+                    className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => handleSessionSelect(session)}
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                          <FiCamera className="w-5 h-5" />
+                        </div>
+                        <div className="ml-3">
+                          <h3 className="text-sm font-medium text-gray-900">
+                            {session.name}
+                          </h3>
+                          <p className="text-xs text-gray-500">
+                            {new Date(session.created).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                      <FiChevronRight className="w-5 h-5 text-gray-400" />
+                    </div>
+                    <div className="flex items-center text-xs text-gray-500 mt-2">
+                      <div className="flex items-center">
+                        <FiImage className="w-4 h-4 mr-1" />
+                        <span>{session.frame_count} frames</span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
+          {activeTab === "frames" && selectedSession && (
+            <div className="flex flex-col flex-1 overflow-hidden">
+              <div className="mb-4 flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      className="w-full pl-9 pr-4 py-2 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      placeholder="Search frames by objects, timestamp..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <button
+                    onClick={() => {
+                      setSelectedSession(null);
+                      setSessionFrames([]);
+                      setActiveTab("sessions");
+                    }}
+                    className="px-3 py-2 rounded-lg text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+                  >
+                    Back to Sessions
+                  </button>
+                </div>
+              </div>
+
+              <div className="mb-2">
+                <h2 className="text-lg font-medium text-gray-900">
+                  {selectedSession.name}
+                </h2>
+                <p className="text-sm text-gray-500">
+                  {new Date(selectedSession.created).toLocaleString()} •{" "}
+                  {sessionFrames.length} frames
+                </p>
+              </div>
+
+              <div className="flex-1 overflow-hidden">
+                {filteredFrames.length === 0 ? (
+                  <div className="py-16 flex flex-col items-center justify-center text-gray-500 h-full">
+                    <FiImage className="w-12 h-12 mb-4 opacity-50" />
+                    <p className="text-lg font-medium mb-1">No Frames Found</p>
+                    <p className="text-sm">
+                      No frames matching your search criteria.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-lg border border-gray-200 overflow-hidden h-full">
+                    <div className="overflow-auto h-full">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50 sticky top-0 z-10">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Frame ID
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Timestamp
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Objects
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Confidence
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Actions
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {filteredFrames.map((frame) => (
+                            <React.Fragment key={frame.id}>
+                              <tr
+                                className={`hover:bg-gray-50 ${
+                                  expandedFrameId === frame.id
+                                    ? "bg-indigo-50"
+                                    : ""
+                                }`}
+                                onClick={() => toggleFrameDescription(frame.id)}
+                              >
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                  <div className="flex items-center">
+                                    <div
+                                      className={`mr-2 transition-transform duration-200 ${
+                                        expandedFrameId === frame.id
+                                          ? "rotate-90"
+                                          : ""
+                                      }`}
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      >
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                      </svg>
+                                    </div>
+                                    {frame.id}
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {frame.timestamp}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-500">
+                                  <div className="flex flex-wrap gap-1">
+                                    {frame.objects
+                                      .slice(0, 3)
+                                      .map((object, idx) => (
+                                        <span
+                                          key={idx}
+                                          className="px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded-full"
+                                        >
+                                          {object}
+                                        </span>
+                                      ))}
+                                    {frame.objects.length > 3 && (
+                                      <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded-full">
+                                        +{frame.objects.length - 3}
+                                      </span>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {Math.round(frame.confidence * 100)}%
+                                </td>
+                                <td
+                                  className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <div className="flex justify-end gap-2">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleFrameClick(frame);
+                                      }}
+                                      className="text-indigo-600 hover:text-indigo-800 px-2 py-1 rounded hover:bg-indigo-50 flex items-center gap-1"
+                                    >
+                                      <FiImage className="w-4 h-4" />
+                                      Show Frame
+                                    </button>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleAskClick(frame, e);
+                                      }}
+                                      className="text-indigo-600 hover:text-indigo-800 px-2 py-1 rounded hover:bg-indigo-50 flex items-center gap-1"
+                                    >
+                                      <FiMessageSquare className="w-4 h-4" />
+                                      Ask
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                              {expandedFrameId === frame.id && (
+                                <tr>
+                                  <td
+                                    colSpan="5"
+                                    className="px-6 py-4 bg-indigo-50"
+                                  >
+                                    <div className="text-sm text-gray-800">
+                                      <h4 className="font-medium mb-2">
+                                        AI Description:
+                                      </h4>
+                                      {frame.llm_description ? (
+                                        <>
+                                          <p className="text-gray-600 bg-white p-3 rounded border border-gray-200">
+                                            {frame.llm_description
+                                              .description ? (
+                                              frame.llm_description.description
+                                            ) : frame.llm_description.error ? (
+                                              <span className="text-red-500">
+                                                {frame.llm_description.error}
+                                              </span>
+                                            ) : (
+                                              "No description generated"
+                                            )}
+                                          </p>
+                                          {frame.llm_description.timestamp && (
+                                            <p className="text-xs text-gray-500 mt-2">
+                                              Generated at:{" "}
+                                              {new Date(
+                                                frame.llm_description.timestamp
+                                              ).toLocaleString()}
+                                            </p>
+                                          )}
+                                        </>
+                                      ) : (
+                                        <p className="text-gray-600 bg-white p-3 rounded border border-gray-200">
+                                          No AI description available for this
+                                          frame.
+                                        </p>
+                                      )}
+                                    </div>
+                                  </td>
+                                </tr>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {selectedFrame && (
         <FrameModal
           frame={selectedFrame}
@@ -529,15 +906,14 @@ const VideoFrames = () => {
         />
       )}
 
-      {/* Ask Popup */}
-      {askFrame && (
+      {askPopupVisible && chatFrame && (
         <AskPopup
-          frame={askFrame}
-          triggerRect={askButtonRect}
+          frame={chatFrame}
           onClose={() => {
-            setAskFrame(null);
-            setAskButtonRect(null);
+            setAskPopupVisible(false);
+            setChatFrame(null);
           }}
+          triggerRect={askPopupTriggerRect}
         />
       )}
     </div>
