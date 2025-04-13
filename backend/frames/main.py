@@ -31,6 +31,9 @@ from main4 import (
 # Import the rest of main4 as a module for accessing classes
 import main4
 
+# Import our Pinecone utilities
+from pinecone_utils import upsert_session_vectors, semantic_search_frames
+
 # Global variables for frame management
 frame_lock = threading.Lock()
 latest_frame = None
@@ -341,6 +344,19 @@ def get_session_frames(session_id):
             else:
                 print("DEBUG: llm_description missing from simplified frame")
         
+        # Asynchronously upload frame vectors to Pinecone
+        # We do this in a separate thread to avoid blocking the response
+        def upload_vectors_in_background():
+            try:
+                upsert_session_vectors(session_id, frames)
+            except Exception as e:
+                print(f"Error upserting vectors for session {session_id}: {e}")
+        
+        # Start a background thread to upsert vectors without blocking response
+        upload_thread = threading.Thread(target=upload_vectors_in_background)
+        upload_thread.daemon = True
+        upload_thread.start()
+        
         return jsonify({"frames": simplified_frames})
     
     except Exception as e:
@@ -590,8 +606,8 @@ def ping():
     return response
 
 @app.route('/api/frames/semantic-search', methods=['POST', 'OPTIONS'])
-def semantic_search_frames():
-    """Endpoint for semantic search across frames in a session using LLM descriptions"""
+def semantic_search_frames_endpoint():
+    """Endpoint for semantic search across frames in a session using Pinecone vector database"""
     # Set CORS headers for preflight request
     if request.method == 'OPTIONS':
         response = app.make_default_options_response()
@@ -625,156 +641,68 @@ def semantic_search_frames():
             response = jsonify({"error": f"Session {session_id} not found"})
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response, 404
+        
+        # Use Pinecone search
+        try:
+            search_results = semantic_search_frames(session_id, query, top_k=5)
             
-        # Load keyframes data
-        keyframes_path = os.path.join(session_dir, "keyframes.json")
-        if not os.path.exists(keyframes_path):
-            response = jsonify({"error": f"Keyframes data not found for session {session_id}"})
+            # Format the response
+            response_data = {
+                "results": search_results
+            }
+            
+            # Add CORS headers to the response
+            response = jsonify(response_data)
             response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 404
+            return response
             
-        with open(keyframes_path, 'r') as f:
-            keyframes_data = json.load(f)
+        except Exception as e:
+            # If Pinecone search fails, we'll have to upsert vectors first
+            print(f"Pinecone search failed: {e}")
+            print("This may be because vectors need to be upserted first. Trying to upsert now...")
             
-        # Extract frames with their descriptions
-        frames = keyframes_data.get('frames', [])
-        
-        # Extract descriptions and prepare for embedding comparison
-        frame_texts = []
-        for frame in frames:
-            # Skip frames without LLM descriptions
-            if not frame.get('llm_description'):
-                continue
+            # Load keyframes data
+            keyframes_path = os.path.join(session_dir, "keyframes.json")
+            if not os.path.exists(keyframes_path):
+                response = jsonify({"error": f"Keyframes data not found for session {session_id}"})
+                response.headers.add('Access-Control-Allow-Origin', '*')
+                return response, 404
                 
-            # Get the description text
-            description = frame.get('llm_description', {}).get('description', '')
-            
-            # Also include detected objects to enhance search
-            objects = ', '.join(frame.get('objects', []))
-            
-            # Skip frames without meaningful content to search
-            if not description and not objects:
-                continue
+            with open(keyframes_path, 'r') as f:
+                keyframes_data = json.load(f)
                 
-            # Combine description and objects
-            text = f"Objects: {objects}. Description: {description}"
+            # Extract frames
+            frames = keyframes_data.get('frames', [])
             
-            # Add to the list of texts to compare
-            frame_texts.append({
-                'id': frame.get('frame_id'),
-                'text': text,
-                'frame': frame
-            })
+            # Upsert vectors
+            success = upsert_session_vectors(session_id, frames)
             
-        if not frame_texts:
-            response = jsonify({"error": "No frames with descriptions found in this session"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 404
-        
-        # Use OpenAI embeddings to find semantically similar frames
-        client = OpenAI()
-        # First, get embedding for the query
-        embedding_response = client.embeddings.create(
-            model="text-embedding-ada-002",
-            input=query
-        )
-        query_embedding = embedding_response.data[0].embedding
-        
-        # Then, get embeddings for each frame
-        frame_embeddings = []
-        
-        # Process in batches to avoid rate limits
-        batch_size = 20
-        for i in range(0, len(frame_texts), batch_size):
-            batch = frame_texts[i:min(i+batch_size, len(frame_texts))]
-            batch_texts = [item['text'] for item in batch]
+            if not success:
+                response = jsonify({"error": "Failed to vectorize frames for search"})
+                response.headers.add('Access-Control-Allow-Origin', '*')
+                return response, 500
+                
+            # Try search again
+            try:
+                search_results = semantic_search_frames(session_id, query, top_k=5)
+                
+                # Format the response
+                response_data = {
+                    "results": search_results
+                }
+                
+                # Add CORS headers to the response
+                response = jsonify(response_data)
+                response.headers.add('Access-Control-Allow-Origin', '*')
+                return response
+            except Exception as e2:
+                print(f"Second attempt at Pinecone search failed: {e2}")
+                response = jsonify({"error": f"Failed to perform search after vectorization: {str(e2)}"})
+                response.headers.add('Access-Control-Allow-Origin', '*')
+                return response, 500
             
-            embedding_response = client.embeddings.create(
-                model="text-embedding-ada-002",
-                input=batch_texts
-            )
-            
-            for j, embedding_data in enumerate(embedding_response.data):
-                frame_embeddings.append({
-                    'id': batch[j]['id'],
-                    'embedding': embedding_data.embedding,
-                    'frame': batch[j]['frame']
-                })
-        
-        # Calculate similarity scores (cosine similarity)
-        from scipy.spatial.distance import cosine
-        
-        # Convert query embedding to numpy array
-        query_embedding_np = np.array(query_embedding)
-        
-        # Calculate similarity for each frame
-        frame_similarities = []
-        for frame_data in frame_embeddings:
-            # Convert frame embedding to numpy array
-            frame_embedding_np = np.array(frame_data['embedding'])
-            
-            # Calculate cosine similarity (1 - cosine distance)
-            similarity = 1 - cosine(query_embedding_np, frame_embedding_np)
-            
-            # Add to results
-            frame_similarities.append({
-                'id': frame_data['id'],
-                'similarity': float(similarity),
-                'frame': frame_data['frame']
-            })
-            
-        # Sort by similarity (highest first)
-        sorted_frames = sorted(frame_similarities, key=lambda x: x['similarity'], reverse=True)
-        
-        # Take top 5 results
-        top_results = sorted_frames[:5]
-        
-        # Generate explanations for why each frame matches the query
-        for result in top_results:
-            # Create explanation prompt
-            explanation_prompt = f"""
-            Analyze this video frame and explain why it matches the user's search query:
-            
-            User Query: "{query}"
-            
-            Frame Content:
-            - Detected Objects: {', '.join(result['frame'].get('objects', []))}
-            - Frame Description: {result['frame'].get('llm_description', {}).get('description', 'No description available')}
-            
-            Provide a short, 1-2 sentence explanation of why this frame is relevant to the search query.
-            Focus only on the most important aspects that match the query.
-            """
-            
-            # Get explanation from GPT
-            explanation_response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=[{"role": "user", "content": explanation_prompt}],
-                max_tokens=100
-            )
-            
-            # Add explanation to result
-            result['explanation'] = explanation_response.choices[0].message.content.strip()
-            
-        # Format the response
-        response_data = {
-            "results": [{
-                "id": result['id'],
-                "similarity": result['similarity'],
-                "timestamp": result['frame'].get('timestamp', ''),
-                "objects": result['frame'].get('objects', []),
-                "explanation": result.get('explanation', ''),
-                # Include other necessary frame data
-                "confidence": result['frame'].get('confidence', 0)
-            } for result in top_results]
-        }
-        
-        # Add CORS headers to the response
-        response = jsonify(response_data)
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
-        
     except Exception as e:
-        print(f"Error in semantic search: {str(e)}")
+        print(f"Error in semantic search endpoint: {str(e)}")
         import traceback
         traceback.print_exc()
         
