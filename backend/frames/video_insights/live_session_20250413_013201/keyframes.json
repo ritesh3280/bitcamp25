@@ -1,0 +1,576 @@
+{
+  "metadata": {
+    "created": "2025-04-13T01:32:01.001942",
+    "version": "1.0"
+  },
+  "frames": [
+    {
+      "timestamp": "00:00",
+      "elapsed_time": 0.01799297332763672,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          742,
+          423,
+          346,
+          324
+        ],
+        "keyboard": [
+          854,
+          722,
+          405,
+          160
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9047583341598511,
+        "keyboard": 0.717386782169342
+      },
+      "frame_id": "56dcdad1",
+      "image_path": "video_insights/live_session_20250413_013201/images/56dcdad1.jpg",
+      "llm_description": {
+        "description": "The frame contains a laptop, an external monitor, and a mechanical keyboard. The laptop and monitor are powered on, displaying a browser with a video thumbnail and a coding environment, respectively. The laptop is connected to the external monitor, likely via HDMI or a similar connection, and a power cable is visible connecting to an external power bank. The mechanical keyboard appears to be wired, with a cable leading to the laptop.",
+        "timestamp": "2025-04-13T01:32:09.345111"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.150132179260254,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          740,
+          421,
+          347,
+          327
+        ],
+        "keyboard": [
+          860,
+          723,
+          400,
+          158
+        ],
+        "tv": [
+          1037,
+          231,
+          219,
+          330
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8923375010490417,
+        "keyboard": 0.6710987091064453,
+        "tv": 0.43858030438423157
+      },
+      "frame_id": "f94c3299",
+      "image_path": "video_insights/live_session_20250413_013201/images/f94c3299.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop and a monitor, both of which are powered on, with the laptop displaying a web browser and the monitor showing what appears to be a code editor. Visible connections include a red cable likely connecting the laptop to the monitor, suggesting a data transfer link. A mechanical keyboard is present, possibly connected wirelessly or by an unseen cable to the laptop for input purposes. No other peripherals or connections are distinctly visible.",
+        "timestamp": "2025-04-13T01:32:10.087557"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.4546351432800293,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          739,
+          421,
+          348,
+          326
+        ],
+        "keyboard": [
+          859,
+          723,
+          401,
+          159
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8919517397880554,
+        "keyboard": 0.6755062341690063
+      },
+      "frame_id": "9f2611c8",
+      "image_path": "video_insights/live_session_20250413_013201/images/9f2611c8.jpg",
+      "llm_description": {
+        "description": "The frame displays a laptop and a mechanical keyboard. The laptop is powered on, with its screen showing a web browser and webcam feed. The mechanical keyboard is likely connected to the laptop, potentially via a visible red cable. Additionally, an external monitor is connected to the laptop, displaying a code editor, indicating extended screen functionality.",
+        "timestamp": "2025-04-13T01:32:08.463194"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.449146032333374,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          739,
+          421,
+          348,
+          325
+        ],
+        "keyboard": [
+          853,
+          723,
+          407,
+          157
+        ],
+        "tv": [
+          1035,
+          233,
+          221,
+          325
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9085977673530579,
+        "keyboard": 0.647709846496582,
+        "tv": 0.4052308201789856
+      },
+      "frame_id": "f09783d5",
+      "image_path": "video_insights/live_session_20250413_013201/images/f09783d5.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, an external monitor (TV), and a keyboard. Both the laptop and the monitor are powered on, with the laptop displaying a web page or application, and the monitor showing code or a coding environment. There is a visible HDMI cable likely connecting the laptop to the monitor for display sharing. The keyboard is a mechanical type with colored keycaps, connected via a cable, possibly USB, to the laptop.",
+        "timestamp": "2025-04-13T01:32:12.753942"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.983885288238525,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          740,
+          421,
+          346,
+          326
+        ],
+        "keyboard": [
+          853,
+          723,
+          407,
+          158
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9128572940826416,
+        "keyboard": 0.5211546421051025
+      },
+      "frame_id": "b0055412",
+      "image_path": "video_insights/live_session_20250413_013201/images/b0055412.jpg",
+      "llm_description": {
+        "description": "The frame displays a laptop and an external keyboard. The laptop appears to be powered on, with its screen displaying a media player, suggesting active use. There is a cable running from the keyboard, indicating a wired connection to the laptop, possibly for input purposes. An external monitor is also visible, connected and showing a code editor, suggesting simultaneous dual-monitor usage.",
+        "timestamp": "2025-04-13T01:32:14.513034"
+      }
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.482318878173828,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          739,
+          421,
+          347,
+          327
+        ],
+        "keyboard": [
+          855,
+          723,
+          405,
+          159
+        ],
+        "tv": [
+          1033,
+          232,
+          223,
+          334
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9090034365653992,
+        "keyboard": 0.5843392014503479,
+        "tv": 0.40997689962387085
+      },
+      "frame_id": "4c733566",
+      "image_path": "video_insights/live_session_20250413_013201/images/4c733566.jpg",
+      "llm_description": {
+        "description": "The image displays a laptop, keyboard, and a TV/monitor. Both the laptop and monitor are powered on, with the laptop displaying a webpage and the monitor showing a coding environment. The keyboard is a peripheral device connected to the laptop, possibly via USB or wireless, though connection specifics are not visible. A red cable is connected to the laptop, potentially for charging or data transfer, and there are no visible connections to the TV/monitor, implying a possible wireless display setup.",
+        "timestamp": "2025-04-13T01:32:15.108331"
+      }
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.683589935302734,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          739,
+          420,
+          347,
+          326
+        ],
+        "keyboard": [
+          858,
+          723,
+          403,
+          158
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9014356732368469,
+        "keyboard": 0.6732473373413086
+      },
+      "frame_id": "ccff78f7",
+      "image_path": "video_insights/live_session_20250413_013201/images/ccff78f7.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, an external monitor, and a mechanical keyboard. Both the laptop and the external monitor are powered on, with the laptop displaying a web page and the monitor displaying a coding environment. The laptop and monitor are likely connected through a cable, although the specific connection type is not visible. The mechanical keyboard is connected to the laptop, as indicated by the presence of a cable.",
+        "timestamp": "2025-04-13T01:32:17.666878"
+      }
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.182722091674805,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          738,
+          420,
+          347,
+          325
+        ],
+        "keyboard": [
+          860,
+          723,
+          400,
+          158
+        ],
+        "tv": [
+          1034,
+          232,
+          222,
+          330
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9006336331367493,
+        "keyboard": 0.6896284818649292,
+        "tv": 0.45018911361694336
+      },
+      "frame_id": "59a99bd1",
+      "image_path": "video_insights/live_session_20250413_013201/images/59a99bd1.jpg",
+      "llm_description": {
+        "description": "The visible electronic devices are a laptop, a mechanical keyboard, and a monitor. Both the laptop and monitor are powered on, displaying what appears to be a video or streaming interface on the laptop and a coding environment on the monitor. The laptop is likely connected to the monitor via a cable and potentially wirelessly synced with other devices. The keyboard is physically connected, likely to the laptop, and there is a red cable possibly for charging or data transfer.",
+        "timestamp": "2025-04-13T01:32:18.703017"
+      }
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.554895877838135,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          738,
+          421,
+          347,
+          324
+        ],
+        "keyboard": [
+          861,
+          723,
+          399,
+          158
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8981443643569946,
+        "keyboard": 0.687479555606842
+      },
+      "frame_id": "34761dae",
+      "image_path": "video_insights/live_session_20250413_013201/images/34761dae.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, an external monitor, and a mechanical keyboard. Both the laptop and monitor are powered on, with the laptop screen displaying a video application and the monitor showing a coding interface. The keyboard is connected to the laptop via a visible cable. No additional peripherals are connected, and there's a power adapter cable visible beside the laptop, indicating it's likely charging.",
+        "timestamp": "2025-04-13T01:32:20.431690"
+      }
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.361248016357422,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          734,
+          421,
+          351,
+          323
+        ],
+        "keyboard": [
+          863,
+          723,
+          397,
+          158
+        ],
+        "tv": [
+          1032,
+          232,
+          225,
+          339
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9012537002563477,
+        "keyboard": 0.6376528739929199,
+        "tv": 0.4612945318222046
+      },
+      "frame_id": "101c6886",
+      "image_path": "video_insights/live_session_20250413_013201/images/101c6886.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, a mechanical keyboard, and a monitor (possibly connected as an external display to the laptop). The laptop and monitor are powered on, displaying windows that appear to show web content on the laptop and code editor on the monitor. The keyboard is wired, connected to the laptop via a visible cable. The laptop and monitor appear linked, likely through an HDMI or similar cable, though the exact connection is not visible.",
+        "timestamp": "2025-04-13T01:32:22.070452"
+      }
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.549398183822632,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          1033,
+          226,
+          222,
+          373
+        ],
+        "keyboard": [
+          862,
+          721,
+          398,
+          160
+        ],
+        "tv": [
+          1032,
+          230,
+          224,
+          344
+        ]
+      },
+      "confidence": {
+        "laptop": 0.506683886051178,
+        "keyboard": 0.7046111226081848,
+        "tv": 0.499879390001297
+      },
+      "frame_id": "9af7613c",
+      "image_path": "video_insights/live_session_20250413_013201/images/9af7613c.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.782810926437378,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          1033,
+          226,
+          222,
+          377
+        ],
+        "keyboard": [
+          862,
+          721,
+          398,
+          160
+        ]
+      },
+      "confidence": {
+        "laptop": 0.5226173400878906,
+        "keyboard": 0.7082759141921997
+      },
+      "frame_id": "f94b6637",
+      "image_path": "video_insights/live_session_20250413_013201/images/f94b6637.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.91600227355957,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          1033,
+          226,
+          222,
+          377
+        ],
+        "keyboard": [
+          862,
+          720,
+          398,
+          161
+        ],
+        "tv": [
+          1033,
+          229,
+          224,
+          342
+        ]
+      },
+      "confidence": {
+        "laptop": 0.5226173400878906,
+        "keyboard": 0.6839267015457153,
+        "tv": 0.4724179208278656
+      },
+      "frame_id": "a89f8156",
+      "image_path": "video_insights/live_session_20250413_013201/images/a89f8156.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.01783299446106,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          736,
+          419,
+          349,
+          325
+        ],
+        "keyboard": [
+          862,
+          720,
+          398,
+          161
+        ],
+        "tv": [
+          1033,
+          229,
+          224,
+          342
+        ]
+      },
+      "confidence": {
+        "laptop": 0.901279628276825,
+        "keyboard": 0.6839267015457153,
+        "tv": 0.4724179208278656
+      },
+      "frame_id": "00b6f5b5",
+      "image_path": "video_insights/live_session_20250413_013201/images/00b6f5b5.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.054956197738647,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          1034,
+          228,
+          222,
+          357
+        ],
+        "keyboard": [
+          862,
+          720,
+          398,
+          161
+        ],
+        "tv": [
+          1033,
+          229,
+          224,
+          338
+        ]
+      },
+      "confidence": {
+        "laptop": 0.41867342591285706,
+        "keyboard": 0.6936869621276855,
+        "tv": 0.5172504782676697
+      },
+      "frame_id": "5cc7529d",
+      "image_path": "video_insights/live_session_20250413_013201/images/5cc7529d.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.382642984390259,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          735,
+          419,
+          350,
+          326
+        ],
+        "keyboard": [
+          863,
+          720,
+          397,
+          161
+        ],
+        "tv": [
+          1032,
+          230,
+          225,
+          340
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8930556774139404,
+        "keyboard": 0.7092424035072327,
+        "tv": 0.4997003674507141
+      },
+      "frame_id": "890b4bfe",
+      "image_path": "video_insights/live_session_20250413_013201/images/890b4bfe.jpg"
+    }
+  ]
+}

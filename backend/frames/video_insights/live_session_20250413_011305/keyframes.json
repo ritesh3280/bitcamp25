@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "created": "2025-04-13T01:13:05.347815",
+    "version": "1.0"
+  },
+  "frames": [
+    {
+      "timestamp": "00:00",
+      "elapsed_time": 0.01840519905090332,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          652,
+          371,
+          439,
+          437
+        ],
+        "keyboard": [
+          709,
+          775,
+          557,
+          272
+        ],
+        "tv": [
+          1020,
+          113,
+          244,
+          435
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9209535121917725,
+        "keyboard": 0.6735963821411133,
+        "tv": 0.5957624912261963
+      },
+      "frame_id": "da057f5c",
+      "image_path": "video_insights/live_session_20250413_011305/images/da057f5c.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-13T01:13:06.862188"
+      }
+    }
+  ]
+}
