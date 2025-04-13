@@ -18,7 +18,7 @@ from openai import OpenAI
 
 # Load environment variables for OpenAI
 load_dotenv()
-client = OpenAI(os.getenv("OPENAI_API_KEY"))  # Uses OPENAI_API_KEY from .env
+client = OpenAI()  # Uses OPENAI_API_KEY from .env
 
 class NumpyJSONEncoder(json.JSONEncoder):
     """Custom JSON encoder that can handle NumPy types"""

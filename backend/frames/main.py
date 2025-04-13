@@ -14,14 +14,11 @@ import sys
 import argparse
 import cv2
 import time
-import asyncio
-import websockets
 import json
-import base64
 import numpy as np
 from datetime import datetime
 import threading
-from flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request, Response, send_file
 from flask_cors import CORS
 
 # Import only the functions we need from main4
@@ -33,9 +30,7 @@ from main4 import (
 # Import the rest of main4 as a module for accessing classes
 import main4
 
-# Global variables for WebSocket
-websocket_server = None
-connected_clients = set()
+# Global variables for frame management
 frame_lock = threading.Lock()
 latest_frame = None
 latest_detections = []
@@ -112,96 +107,179 @@ def control_analysis():
     else:
         return jsonify({"error": f"Unknown command: {command}"}), 400
 
-async def websocket_handler(websocket):
-    """Handle WebSocket connections"""
-    client_info = websocket.remote_address
-    print(f"Client connected: {client_info}")
+@app.route('/api/sessions', methods=['GET'])
+def get_sessions():
+    """Return a list of all available video insights sessions"""
     try:
-        connected_clients.add(websocket)
-        # Send initial confirmation message
-        await websocket.send(json.dumps({"status": "connected", "message": "Connection established"}))
+        base_dir = "video_insights"
+        if not os.path.exists(base_dir):
+            return jsonify({"error": "No sessions found"}), 404
         
-        # Keep the connection alive
-        while True:
-            try:
-                # Wait for client messages
-                message = await websocket.recv()
-                print(f"Received message from {client_info}: {message[:50]}...")
-                # Here we could handle client messages if needed
-            except websockets.exceptions.ConnectionClosed as e:
-                print(f"Connection closed with {client_info}: code: {e.code}, reason: {e.reason}")
+        # Get list of all session directories
+        sessions = []
+        for item in os.listdir(base_dir):
+            item_path = os.path.join(base_dir, item)
+            if os.path.isdir(item_path):
+                # Check if keyframes.json exists
+                keyframes_path = os.path.join(item_path, "keyframes.json")
+                if os.path.exists(keyframes_path):
+                    # Get creation time from metadata or use file creation time
+                    try:
+                        with open(keyframes_path, 'r') as f:
+                            metadata = json.load(f).get('metadata', {})
+                            created = metadata.get('created', None)
+                    except:
+                        created = None
+                    
+                    if not created:
+                        # Fallback to directory creation time
+                        created = datetime.fromtimestamp(os.path.getctime(item_path)).isoformat()
+                    
+                    # Get frame count
+                    frame_count = 0
+                    images_dir = os.path.join(item_path, "images")
+                    if os.path.exists(images_dir):
+                        frame_count = len([f for f in os.listdir(images_dir) if f.endswith('.jpg')])
+                    
+                    sessions.append({
+                        "id": item,
+                        "name": item.replace("_", " ").title(),
+                        "created": created,
+                        "frame_count": frame_count,
+                        "path": item_path
+                    })
+        
+        # Sort by creation time (newest first)
+        sessions.sort(key=lambda x: x['created'], reverse=True)
+        
+        return jsonify({"sessions": sessions})
+    
+    except Exception as e:
+        print(f"Error getting sessions: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessions/<session_id>', methods=['GET'])
+def get_session_details(session_id):
+    """Return detailed information about a specific session"""
+    try:
+        base_dir = "video_insights"
+        session_dir = os.path.join(base_dir, session_id)
+        
+        if not os.path.exists(session_dir):
+            return jsonify({"error": "Session not found"}), 404
+        
+        keyframes_path = os.path.join(session_dir, "keyframes.json")
+        if not os.path.exists(keyframes_path):
+            return jsonify({"error": "Session data not found"}), 404
+        
+        with open(keyframes_path, 'r') as f:
+            session_data = json.load(f)
+        
+        # Extract metadata
+        metadata = session_data.get('metadata', {})
+        
+        # Count frames
+        frame_count = len(session_data.get('frames', []))
+        
+        return jsonify({
+            "id": session_id,
+            "name": session_id.replace("_", " ").title(),
+            "created": metadata.get('created', ''),
+            "frame_count": frame_count,
+            "metadata": metadata
+        })
+    
+    except Exception as e:
+        print(f"Error getting session details: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessions/<session_id>/frames', methods=['GET'])
+def get_session_frames(session_id):
+    """Return frames from a specific session"""
+    try:
+        base_dir = "video_insights"
+        session_dir = os.path.join(base_dir, session_id)
+        
+        if not os.path.exists(session_dir):
+            return jsonify({"error": "Session not found"}), 404
+        
+        keyframes_path = os.path.join(session_dir, "keyframes.json")
+        if not os.path.exists(keyframes_path):
+            return jsonify({"error": "Session data not found"}), 404
+        
+        with open(keyframes_path, 'r') as f:
+            session_data = json.load(f)
+        
+        frames = session_data.get('frames', [])
+        
+        # Add debug logging
+        print(f"DEBUG: First frame keys in keyframes.json: {list(frames[0].keys()) if frames else 'No frames'}")
+        if frames and 'llm_description' in frames[0]:
+            print(f"DEBUG: llm_description exists in first frame: {frames[0]['llm_description']}")
+        
+        # Create a simplified view of frames for the frontend
+        simplified_frames = []
+        for frame in frames:
+            frame_data = {
+                "id": frame.get('frame_id', ''),
+                "timestamp": frame.get('timestamp', ''),
+                "elapsed_time": frame.get('elapsed_time', 0),
+                "image_path": frame.get('image_path', ''),
+                "objects": frame.get('objects', []),
+                "confidence": max(frame.get('confidence', {}).values()) if frame.get('confidence') else 0,
+                # Include the llm_description if it exists
+                "llm_description": frame.get('llm_description', None)
+            }
+            simplified_frames.append(frame_data)
+        
+        # Add debug logging for response
+        if simplified_frames:
+            print(f"DEBUG: First simplified frame keys: {list(simplified_frames[0].keys())}")
+            if 'llm_description' in simplified_frames[0]:
+                print(f"DEBUG: llm_description value in simplified frame: {simplified_frames[0]['llm_description']}")
+            else:
+                print("DEBUG: llm_description missing from simplified frame")
+        
+        return jsonify({"frames": simplified_frames})
+    
+    except Exception as e:
+        print(f"Error getting session frames: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/frames/<frame_id>/image', methods=['GET'])
+def get_frame_image(frame_id):
+    """Return the image for a specific frame"""
+    try:
+        # Search for the frame in all sessions
+        base_dir = "video_insights"
+        frame_path = None
+        
+        for session in os.listdir(base_dir):
+            session_dir = os.path.join(base_dir, session)
+            if not os.path.isdir(session_dir):
+                continue
+                
+            images_dir = os.path.join(session_dir, "images")
+            if not os.path.exists(images_dir):
+                continue
+                
+            potential_path = os.path.join(images_dir, f"{frame_id}.jpg")
+            if os.path.exists(potential_path):
+                frame_path = potential_path
                 break
-    except Exception as e:
-        print(f"Error in websocket handler for {client_info}: {e}")
-    finally:
-        if websocket in connected_clients:
-            connected_clients.remove(websocket)
-        print(f"Client disconnected: {client_info}")
-
-async def broadcast_frame():
-    """Broadcast the latest frame to all connected clients"""
-    while True:
-        try:
-            if connected_clients and latest_frame is not None:
-                with frame_lock:
-                    # Encode the frame as base64
-                    _, buffer = cv2.imencode('.jpg', latest_frame, [cv2.IMWRITE_JPEG_QUALITY, 70])
-                    frame_base64 = base64.b64encode(buffer).decode('utf-8')
-                    
-                    # Create message with frame and detections
-                    message = {
-                        "frame": frame_base64,
-                        "detections": latest_detections
-                    }
-                    
-                    message_json = json.dumps(message)
-                    
-                    # Send to all connected clients
-                    disconnect_clients = []
-                    for websocket in connected_clients:
-                        try:
-                            await websocket.send(message_json)
-                        except websockets.exceptions.ConnectionClosed:
-                            # Mark for removal
-                            disconnect_clients.append(websocket)
-                        except Exception as e:
-                            print(f"Error sending to client {websocket.remote_address}: {e}")
-                            disconnect_clients.append(websocket)
-                    
-                    # Remove disconnected clients
-                    for client in disconnect_clients:
-                        if client in connected_clients:
-                            connected_clients.remove(client)
-                            print(f"Removed disconnected client: {client.remote_address}")
-        except Exception as e:
-            print(f"Error in broadcast_frame: {e}")
-            
-        # Sleep to control the frame rate (adjust as needed)
-        await asyncio.sleep(0.1)  # ~10 FPS
-
-async def start_websocket_server(host='0.0.0.0', port=8765):
-    """Start the WebSocket server"""
-    global websocket_server
-    try:
-        websocket_server = await websockets.serve(
-            websocket_handler, 
-            host, 
-            port,
-            ping_interval=30,  # Send ping every 30 seconds
-            ping_timeout=10     # Wait 10 seconds for pong before closing
-        )
-        print(f"WebSocket server started at ws://{host}:{port}")
         
-        # Start broadcasting frames
-        asyncio.create_task(broadcast_frame())
+        if not frame_path:
+            return jsonify({"error": "Frame not found"}), 404
         
-        # Keep the server running
-        await websocket_server.wait_closed()
+        # Return the image
+        return send_file(frame_path, mimetype='image/jpeg')
+    
     except Exception as e:
-        print(f"Error starting WebSocket server: {e}")
+        print(f"Error getting frame image: {e}")
+        return jsonify({"error": str(e)}), 500
 
 def update_latest_frame(frame, detections):
-    """Update the latest frame and detections for WebSocket broadcast"""
+    """Update the latest frame and detections for HTTP API"""
     global latest_frame, latest_detections
     
     with frame_lock:
@@ -292,8 +370,8 @@ def run_live_recording(camera_id=1, max_api_calls=10, threshold=30):
     print(f"\nPress 'q' to stop recording")
     print(f"Session directory: {session_dir}")
     
-    # Modified get_frame function to update latest frame for WebSocket
-    def get_frame_with_websocket(cap, fps_data, yolo_model, frame_counter, tracker, deduplicator, llm_processor, start_time):
+    # Modified get_frame function to update latest frame for HTTP API
+    def get_frame_with_http(cap, fps_data, yolo_model, frame_counter, tracker, deduplicator, llm_processor, start_time):
         # If analysis is paused, we'll just return True without processing
         if not analysis_status["is_running"]:
             time.sleep(0.1)  # Small sleep to avoid excessive CPU usage
@@ -391,7 +469,7 @@ def run_live_recording(camera_id=1, max_api_calls=10, threshold=30):
             cv2.putText(display_frame, f"FPS: {fps:.2f}", (10, 30), 
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         
-        # Update the latest frame for WebSocket broadcast
+        # Update the latest frame for HTTP API
         update_latest_frame(display_frame, smoothed_detections)
         
         # Update analysis status
@@ -411,7 +489,7 @@ def run_live_recording(camera_id=1, max_api_calls=10, threshold=30):
     
     try:
         while True:
-            if not get_frame_with_websocket(cap, fps_data, yolo_model, frame_counter, 
+            if not get_frame_with_http(cap, fps_data, yolo_model, frame_counter, 
                             tracker, deduplicator, llm_processor, start_time):
                 break
             frame_counter += 1
@@ -449,11 +527,13 @@ def main():
     )
     
     # Mode selection
-    mode_group = parser.add_mutually_exclusive_group(required=True)
+    mode_group = parser.add_mutually_exclusive_group(required=False)
     mode_group.add_argument('--live', action='store_true',
                          help='Record and analyze live camera/screen feed')
     mode_group.add_argument('--video', metavar='VIDEO_PATH',
                          help='Process an existing video file')
+    mode_group.add_argument('--server-only', action='store_true',
+                         help='Run the Flask server only, without recording or processing')
     
     # Common parameters
     parser.add_argument('-m', '--max-calls', type=int, default=10,
@@ -474,31 +554,25 @@ def main():
     args = parser.parse_args()
     
     try:
+        # Start Flask server in a separate thread
+        def run_flask_server():
+            app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+        
+        flask_thread = threading.Thread(target=run_flask_server, daemon=True)
+        flask_thread.start()
+        
+        print(f"HTTP API started at http://localhost:5000")
+        print(f"Available endpoints:")
+        print(f"  - GET  /api/status               : Current analysis status")
+        print(f"  - GET  /api/latest-frame         : Latest frame as JPEG")
+        print(f"  - GET  /api/latest-detections    : Latest detections")
+        print(f"  - POST /api/control              : Control analysis (pause/resume)")
+        print(f"  - GET  /api/sessions             : List all sessions")
+        print(f"  - GET  /api/sessions/<id>        : Get session details")
+        print(f"  - GET  /api/sessions/<id>/frames : Get frames for a session")
+        print(f"  - GET  /api/frames/<id>/image    : Get frame image")
+        
         if args.live:
-            # Start WebSocket server in a separate thread
-            loop = asyncio.new_event_loop()
-            
-            def run_websocket_server():
-                asyncio.set_event_loop(loop)
-                loop.run_until_complete(start_websocket_server())
-            
-            websocket_thread = threading.Thread(target=run_websocket_server, daemon=True)
-            websocket_thread.start()
-            
-            # Start Flask server in a separate thread
-            def run_flask_server():
-                app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
-            
-            flask_thread = threading.Thread(target=run_flask_server, daemon=True)
-            flask_thread.start()
-            
-            print(f"HTTP API started at http://localhost:5000")
-            print(f"Available endpoints:")
-            print(f"  - GET  /api/status               : Current analysis status")
-            print(f"  - GET  /api/latest-frame         : Latest frame as JPEG")
-            print(f"  - GET  /api/latest-detections    : Latest detections")
-            print(f"  - POST /api/control              : Control analysis (pause/resume)")
-            
             # Run live recording mode
             run_live_recording(
                 camera_id=args.camera,
@@ -520,6 +594,14 @@ def main():
                 max_api_calls=args.max_calls,
                 threshold=args.threshold
             )
+        
+        else:
+            # Just run the Flask server
+            print("\n--- Running Flask server only mode ---")
+            print("Press Ctrl+C to exit")
+            # Keep the main thread alive to allow the Flask thread to run
+            while True:
+                time.sleep(1)
             
     except KeyboardInterrupt:
         print("\nProcess interrupted by user")
