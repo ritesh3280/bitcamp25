@@ -1,0 +1,30 @@
+{
+  "sessions": [
+    {
+      "id": "b2554c6e",
+      "name": "Test Analysis of bitcampvideo.mp4",
+      "created": "2025-04-13T06:04:48.997744",
+      "is_mock": true
+    },
+    {
+      "id": "65bfe1a6",
+      "name": "Test Analysis of bitcampvideo.mp4",
+      "created": "2025-04-13T06:06:11.824578",
+      "is_mock": true
+    },
+    {
+      "id": "c0c32751",
+      "name": "Test Analysis of bitcampvideo.mp4",
+      "created": "2025-04-13T06:12:32.909455",
+      "is_mock": true
+    },
+    {
+      "id": "b550d993",
+      "name": "Analysis of bitcampvideo.mp4",
+      "created": "2025-04-13T06:16:50.448037",
+      "video_path": "/Users/ritesh/bit25hack/bitcamp25/backend/frames/uploads/bitcampvideo.mp4",
+      "result_dir": "video_insights/bitcampvideo_20250413_061612",
+      "frame_count": 19
+    }
+  ]
+}

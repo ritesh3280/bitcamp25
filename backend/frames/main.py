@@ -21,6 +21,22 @@ import threading
 from flask import Flask, jsonify, request, Response, send_file
 from flask_cors import CORS
 from openai import OpenAI
+from dotenv import load_dotenv
+from ultralytics import YOLO
+from functools import wraps
+import uuid
+import logging
+import tempfile
+import concurrent.futures
+import shutil
+
+# Try to import the video processing module
+try:
+    from main4 import process_video_file
+    video_processor_available = True
+except ImportError:
+    print("Video processing module (main4.py) not available")
+    video_processor_available = False
 
 # Import only the functions we need from main4
 from main4 import (
@@ -57,31 +73,12 @@ threshold = 30
 # Create Flask app
 app = Flask(__name__)
 
-# More permissive CORS setup - allow all origins, methods, and headers
+# Standard CORS setup that should work for all cases
 CORS(app, resources={r"/*": {
-    "origins": "*", 
+    "origins": "*",  # Allow all origins
     "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"]
-}}, supports_credentials=True)
-
-# Add explicit OPTIONS handler for the specific ask endpoint
-@app.route('/api/ask', methods=['OPTIONS'])
-def options_ask():
-    response = app.make_default_options_response()
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
-    return response
-
-# General options handler for all other routes
-@app.route('/', defaults={'path': ''}, methods=['OPTIONS'])
-@app.route('/<path:path>', methods=['OPTIONS'])
-def options_handler(path):
-    response = app.make_default_options_response()
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
-    return response
+}}, supports_credentials=False)  # Changed to False for standard CORS with any origin
 
 @app.route('/api/status', methods=['GET'])
 def get_status():
@@ -386,9 +383,7 @@ def get_frame_image(frame_id):
                 break
         
         if not frame_path:
-            response = jsonify({"error": "Frame not found"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 404
+            return jsonify({"error": "Frame not found"}), 404
         
         # Return the image
         return send_file(frame_path, mimetype='image/jpeg')
@@ -400,31 +395,22 @@ def get_frame_image(frame_id):
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
     """Simplified chat endpoint for frame analysis that avoids CORS issues"""
-    # Set CORS headers for preflight request
+    # No need for manual CORS handling - Flask-CORS extension takes care of it
     if request.method == 'OPTIONS':
-        response = app.make_default_options_response()
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Max-Age', '3600')
-        return response
+        return app.make_default_options_response()
         
     try:
         # For actual POST requests
         data = request.json
         if not data:
-            response = jsonify({"error": "No data provided"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 400
+            return jsonify({"error": "No data provided"}), 400
             
         frame_id = data.get('frame_id')
         question = data.get('question')
         conversation_history = data.get('conversation_history', [])
         
         if not frame_id or not question:
-            response = jsonify({"error": "Missing frame_id or question"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 400
+            return jsonify({"error": "Missing frame_id or question"}), 400
             
         # Search for the frame
         base_dir = "video_insights"
@@ -457,9 +443,7 @@ def chat():
                 break
                 
         if not frame_path:
-            response = jsonify({"error": "Frame not found"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 404
+            return jsonify({"error": "Frame not found"}), 404
             
         # Get objects from frame data
         objects_text = "No objects detected"
@@ -530,16 +514,11 @@ def chat():
             ]
         }
         
-        # Create response with CORS headers
-        response = jsonify(result)
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
+        return jsonify(result)
         
     except Exception as e:
         print(f"Error in chat endpoint: {e}")
-        response = jsonify({"error": str(e)})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 500
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/cameras/check', methods=['POST'])
 def check_camera():
@@ -595,52 +574,35 @@ def check_camera():
 def ping():
     """Simple endpoint to test CORS and connectivity"""
     if request.method == 'OPTIONS':
-        response = app.make_default_options_response()
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        return response
+        return app.make_default_options_response()
         
-    response = jsonify({"status": "ok", "message": "Backend API is up and running"})
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    return jsonify({"status": "ok", "message": "Backend API is up and running"})
 
 @app.route('/api/frames/semantic-search', methods=['POST', 'OPTIONS'])
 def semantic_search_frames_endpoint():
     """Endpoint for semantic search across frames in a session using Pinecone vector database"""
-    # Set CORS headers for preflight request
+    # No need for manual CORS handling - Flask-CORS extension takes care of it
     if request.method == 'OPTIONS':
-        response = app.make_default_options_response()
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Max-Age', '3600')
-        return response
+        return app.make_default_options_response()
         
     try:
         # For actual POST requests
         data = request.json
         if not data:
-            response = jsonify({"error": "No data provided"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 400
+            return jsonify({"error": "No data provided"}), 400
             
         session_id = data.get('session_id')
         query = data.get('query')
         
         if not session_id or not query:
-            response = jsonify({"error": "Missing session_id or query"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 400
+            return jsonify({"error": "Missing session_id or query"}), 400
             
         # Find the session directory
         base_dir = "video_insights"
         session_dir = os.path.join(base_dir, session_id)
         
         if not os.path.isdir(session_dir):
-            response = jsonify({"error": f"Session {session_id} not found"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response, 404
+            return jsonify({"error": f"Session {session_id} not found"}), 404
         
         # Use Pinecone search
         try:
@@ -651,10 +613,7 @@ def semantic_search_frames_endpoint():
                 "results": search_results
             }
             
-            # Add CORS headers to the response
-            response = jsonify(response_data)
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response
+            return jsonify(response_data)
             
         except Exception as e:
             # If Pinecone search fails, we'll have to upsert vectors first
@@ -664,9 +623,7 @@ def semantic_search_frames_endpoint():
             # Load keyframes data
             keyframes_path = os.path.join(session_dir, "keyframes.json")
             if not os.path.exists(keyframes_path):
-                response = jsonify({"error": f"Keyframes data not found for session {session_id}"})
-                response.headers.add('Access-Control-Allow-Origin', '*')
-                return response, 404
+                return jsonify({"error": f"Keyframes data not found for session {session_id}"}), 404
                 
             with open(keyframes_path, 'r') as f:
                 keyframes_data = json.load(f)
@@ -678,9 +635,7 @@ def semantic_search_frames_endpoint():
             success = upsert_session_vectors(session_id, frames)
             
             if not success:
-                response = jsonify({"error": "Failed to vectorize frames for search"})
-                response.headers.add('Access-Control-Allow-Origin', '*')
-                return response, 500
+                return jsonify({"error": "Failed to vectorize frames for search"}), 500
                 
             # Try search again
             try:
@@ -691,24 +646,266 @@ def semantic_search_frames_endpoint():
                     "results": search_results
                 }
                 
-                # Add CORS headers to the response
-                response = jsonify(response_data)
-                response.headers.add('Access-Control-Allow-Origin', '*')
-                return response
+                return jsonify(response_data)
             except Exception as e2:
                 print(f"Second attempt at Pinecone search failed: {e2}")
-                response = jsonify({"error": f"Failed to perform search after vectorization: {str(e2)}"})
-                response.headers.add('Access-Control-Allow-Origin', '*')
-                return response, 500
+                return jsonify({"error": f"Failed to perform search after vectorization: {str(e2)}"}), 500
             
     except Exception as e:
         print(f"Error in semantic search endpoint: {str(e)}")
         import traceback
         traceback.print_exc()
         
-        response = jsonify({"error": f"An error occurred: {str(e)}"})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 500
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+@app.route('/api/upload', methods=['POST', 'OPTIONS'])
+def upload_file_endpoint():
+    """
+    Upload a video file to the server
+    """
+    # No need to handle CORS manually - Flask-CORS extension takes care of it
+    if request.method == 'OPTIONS':
+        return app.make_default_options_response()
+    
+    try:
+        # Check if file was sent
+        if 'video' not in request.files:
+            return jsonify({"error": "No file provided"}), 400
+        
+        file = request.files['video']
+        
+        # Check if filename is empty
+        if file.filename == '':
+            return jsonify({"error": "No file selected"}), 400
+        
+        # Create uploads directory if it doesn't exist
+        uploads_dir = os.path.join(os.path.dirname(__file__), 'uploads')
+        if not os.path.exists(uploads_dir):
+            os.makedirs(uploads_dir)
+        
+        # Save the file
+        file_path = os.path.join(uploads_dir, file.filename)
+        file.save(file_path)
+        
+        return jsonify({
+            "success": True,
+            "message": "File uploaded successfully",
+            "filename": file.filename
+        })
+        
+    except Exception as e:
+        print(f"Error uploading file: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/process-video', methods=['POST', 'OPTIONS'])
+def process_video_endpoint():
+    """
+    Process a video file with the video_insights module
+    """
+    # No need to handle CORS manually - Flask-CORS extension takes care of it
+    if request.method == 'OPTIONS':
+        return app.make_default_options_response()
+    
+    # Handle the actual request
+    try:
+        # Parse JSON data
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        # Extract parameters
+        filename = data.get('filename')
+        frame_interval = data.get('frame_interval', 15)
+        max_api_calls = data.get('max_api_calls', 10)
+        threshold = data.get('threshold', 30)
+        mock_file = data.get('mock_file', False)  # Check if this is a mock request
+        
+        if not filename:
+            return jsonify({"error": "Filename is required"}), 400
+        
+        # Check if video processing is available
+        if not video_processor_available:
+            return jsonify({"error": "Video processing module is not available"}), 500
+        
+        # Check if the video file exists in the uploads directory
+        uploads_dir = os.path.join(os.path.dirname(__file__), 'uploads')
+        video_path = os.path.join(uploads_dir, filename)
+        
+        if not os.path.exists(uploads_dir):
+            os.makedirs(uploads_dir)
+            
+        # If the file doesn't exist and mock_file is true, use a default sample video
+        # or create a mock file entry in the sessions.json
+        if not os.path.exists(video_path):
+            if mock_file:
+                print(f"Mock file requested for {filename}")
+                # Generate a session ID
+                session_id = str(uuid.uuid4())[:8]
+                
+                # For demo, we'll pretend processing happened without actually doing it
+                # Add session directly to sessions.json
+                sessions_file = os.path.join(os.path.dirname(__file__), 'sessions.json')
+                try:
+                    if os.path.exists(sessions_file):
+                        with open(sessions_file, 'r') as f:
+                            sessions = json.load(f)
+                    else:
+                        sessions = {"sessions": []}
+                    
+                    # Add new mock session
+                    sessions["sessions"].append({
+                        "id": session_id,
+                        "name": f"Analysis of {filename} (Mock)",
+                        "created": datetime.now().isoformat(),
+                        "video_path": video_path,
+                        "frame_count": 0,
+                        "is_mock": True
+                    })
+                    
+                    # Save back to the file
+                    with open(sessions_file, 'w') as f:
+                        json.dump(sessions, f, indent=2)
+                    
+                    # Return success response for mock processing
+                    return jsonify({
+                        "success": True,
+                        "message": "Mock video processing started",
+                        "session_id": session_id
+                    })
+                    
+                except Exception as e:
+                    print(f"Error creating mock session: {e}")
+                    return jsonify({"error": str(e)}), 500
+            else:
+                return jsonify({"error": f"Video file {filename} not found in uploads directory"}), 404
+        
+        # Generate a session ID
+        session_id = str(uuid.uuid4())[:8]
+        
+        # Process the video in a background thread to avoid blocking
+        def process_video_thread():
+            try:
+                # Call the video processing function
+                result_dir = process_video_file(
+                    video_path=video_path,
+                    frame_interval=frame_interval,
+                    max_api_calls=max_api_calls,
+                    threshold=threshold
+                )
+                
+                print(f"Video processing complete. Results in: {result_dir}")
+                
+                # Update session info with the result directory for later retrieval
+                # This would normally be stored in a database
+                sessions_file = os.path.join(os.path.dirname(__file__), 'sessions.json')
+                try:
+                    if os.path.exists(sessions_file):
+                        with open(sessions_file, 'r') as f:
+                            sessions = json.load(f)
+                    else:
+                        sessions = {"sessions": []}
+                    
+                    # Add new session
+                    sessions["sessions"].append({
+                        "id": session_id,
+                        "name": f"Analysis of {filename}",
+                        "created": datetime.now().isoformat(),
+                        "video_path": video_path,
+                        "result_dir": result_dir,
+                        "frame_count": len(os.listdir(os.path.join(result_dir, "images"))) if result_dir else 0
+                    })
+                    
+                    # Save back to the file
+                    with open(sessions_file, 'w') as f:
+                        json.dump(sessions, f, indent=2)
+                        
+                except Exception as e:
+                    print(f"Error updating sessions file: {e}")
+                    
+            except Exception as e:
+                print(f"Error in video processing thread: {e}")
+        
+        # Start the processing thread
+        threading.Thread(target=process_video_thread).start()
+        
+        # Return success with the session ID
+        return jsonify({
+            "success": True,
+            "message": "Video processing started",
+            "session_id": session_id
+        })
+        
+    except Exception as e:
+        print(f"Error processing video: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/process-video-test', methods=['POST', 'OPTIONS'])
+def process_video_test_endpoint():
+    """
+    Simplified test endpoint for video processing to debug CORS and method issues
+    """
+    # No need to handle CORS manually - Flask-CORS extension takes care of it
+    if request.method == 'OPTIONS':
+        return app.make_default_options_response()
+    
+    # Handle the actual request
+    try:
+        # Parse JSON data
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        # Extract parameters
+        filename = data.get('filename')
+        mock_file = data.get('mock_file', False)
+        
+        if not filename:
+            return jsonify({"error": "Filename is required"}), 400
+        
+        # Just log the request and return success for testing
+        print(f"TEST ENDPOINT: Received request to process video: {filename}")
+        print(f"TEST ENDPOINT: Mock file requested: {mock_file}")
+        
+        # Generate a session ID
+        session_id = str(uuid.uuid4())[:8]
+        
+        # Add an entry to sessions.json if mock_file is True
+        if mock_file:
+            sessions_file = os.path.join(os.path.dirname(__file__), 'sessions.json')
+            try:
+                if os.path.exists(sessions_file):
+                    with open(sessions_file, 'r') as f:
+                        sessions = json.load(f)
+                else:
+                    sessions = {"sessions": []}
+                
+                # Add new mock session
+                sessions["sessions"].append({
+                    "id": session_id,
+                    "name": f"Test Analysis of {filename}",
+                    "created": datetime.now().isoformat(),
+                    "is_mock": True
+                })
+                
+                # Save back to the file
+                with open(sessions_file, 'w') as f:
+                    json.dump(sessions, f, indent=2)
+                
+                print(f"TEST ENDPOINT: Added mock session with ID: {session_id}")
+                
+            except Exception as e:
+                print(f"TEST ENDPOINT: Error creating mock session: {e}")
+        
+        # Return success
+        return jsonify({
+            "success": True,
+            "message": "Test endpoint: Processing request received",
+            "session_id": session_id
+        })
+        
+    except Exception as e:
+        print(f"TEST ENDPOINT: Error processing request: {e}")
+        return jsonify({"error": str(e)}), 500
 
 def update_latest_frame(frame, detections):
     """Update the latest frame and detections for HTTP API"""
@@ -1014,6 +1211,12 @@ def main():
         description='Video Analysis System - Process live camera feeds or video files',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
+    
+    # Create uploads directory if it doesn't exist
+    uploads_dir = os.path.join(os.path.dirname(__file__), 'uploads')
+    if not os.path.exists(uploads_dir):
+        os.makedirs(uploads_dir)
+        print(f"Created uploads directory: {uploads_dir}")
     
     # Mode selection
     mode_group = parser.add_mutually_exclusive_group(required=False)

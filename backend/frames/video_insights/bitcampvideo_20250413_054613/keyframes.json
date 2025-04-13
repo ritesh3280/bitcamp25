@@ -1,0 +1,697 @@
+{
+  "metadata": {
+    "created": "2025-04-13T05:46:13.184021",
+    "version": "1.0",
+    "video_source": "/Users/ritesh/bit25hack/bitcamp25/backend/frames/uploads/bitcampvideo.mp4",
+    "fps": 30.0,
+    "total_frames": 404,
+    "duration": 13.466666666666667,
+    "frame_interval": 15
+  },
+  "frames": [
+    {
+      "timestamp": "00:00",
+      "elapsed_time": 0.0,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          323,
+          672,
+          708,
+          681
+        ],
+        "keyboard": [
+          530,
+          1252,
+          966,
+          387
+        ],
+        "tv": [
+          965,
+          156,
+          761,
+          873
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9418745636940002,
+        "keyboard": 0.9185706973075867,
+        "tv": 0.8544281125068665
+      },
+      "frame_id": "9f57b9da",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/9f57b9da.jpg",
+      "llm_description": {
+        "description": "1) The visible electronic devices include a laptop, an external keyboard, and a monitor. \n2) The laptop and monitor are powered on; the laptop displays a message prompting a connection to a laptop, and the monitor shows a coding interface.\n3) A cable connects the laptop to the monitor, suggesting a wired video output connection.\n4) The RGB-backlit keyboard is connected to the laptop, likely via a wired USB connection.",
+        "timestamp": "2025-04-13T05:46:23.854588"
+      }
+    },
+    {
+      "timestamp": "00:00",
+      "elapsed_time": 0.5,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          329,
+          683,
+          704,
+          678
+        ],
+        "keyboard": [
+          532,
+          1267,
+          965,
+          378
+        ],
+        "tv": [
+          967,
+          179,
+          759,
+          860
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9480528831481934,
+        "keyboard": 0.9146663546562195,
+        "tv": 0.8882101774215698
+      },
+      "frame_id": "e6c0dd1c",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/e6c0dd1c.jpg",
+      "llm_description": {
+        "description": "The frame shows three electronic devices: a laptop, a keyboard, and a TV or monitor. Both the laptop and the monitor are powered on. The laptop is connected to the monitor, likely via a cable, but the specific type of connection is not visible. The keyboard is wired and connected to the laptop, evident by the visible USB cable. The laptop screen displays a low battery warning, while the monitor shows a coding environment with visible text and code.",
+        "timestamp": "2025-04-13T05:46:25.525438"
+      }
+    },
+    {
+      "timestamp": "00:01",
+      "elapsed_time": 1.0,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          262,
+          711,
+          727,
+          697
+        ],
+        "keyboard": [
+          476,
+          1280,
+          980,
+          420
+        ],
+        "tv": [
+          908,
+          216,
+          818,
+          832
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9207639694213867,
+        "keyboard": 0.922855019569397,
+        "tv": 0.8766096234321594
+      },
+      "frame_id": "7c816ebf",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/7c816ebf.jpg",
+      "llm_description": {
+        "description": "1) The visible electronic devices are a laptop and a monitor (TV).\n2) Both devices are powered on. The laptop screen shows an image with a cityscape background and a mobile phone overlay, while the monitor displays code.\n3) A visible cable appears to connect the laptop to the monitor, possibly via HDMI or another interface, indicating a wired connection.\n4) A mechanical keyboard with RGB lighting is positioned in front of the laptop, suggesting a possible wireless or wired connection to the laptop.",
+        "timestamp": "2025-04-13T05:46:24.140172"
+      }
+    },
+    {
+      "timestamp": "00:01",
+      "elapsed_time": 1.5,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          256,
+          676,
+          767,
+          748
+        ],
+        "keyboard": [
+          509,
+          1272,
+          1013,
+          465
+        ],
+        "tv": [
+          919,
+          162,
+          806,
+          844
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9512746334075928,
+        "keyboard": 0.9245948791503906,
+        "tv": 0.853305459022522
+      },
+      "frame_id": "fae9d5ce",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/fae9d5ce.jpg",
+      "llm_description": {
+        "description": "1) The visible electronic devices include a laptop, an external keyboard, and a monitor (TV).\n2) The laptop and monitor are powered on; the laptop shows an update screen, while the monitor displays code in a text editor.\n3) A cable connection appears between the laptop and the monitor, with a wireless or wired connection likely for the keyboard.\n4) No other peripherals are visibly connected directly to the devices.",
+        "timestamp": "2025-04-13T05:46:32.446731"
+      }
+    },
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.0,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          252,
+          666,
+          805,
+          795
+        ],
+        "keyboard": [
+          546,
+          1266,
+          1017,
+          516
+        ],
+        "tv": [
+          898,
+          130,
+          827,
+          840
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9423815011978149,
+        "keyboard": 0.935340404510498,
+        "tv": 0.8707340359687805
+      },
+      "frame_id": "01b8bb73",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/01b8bb73.jpg",
+      "llm_description": {
+        "description": "The image shows a laptop, a keyboard, and a TV or monitor. The laptop is powered on, displaying a wallpaper with a battery notification overlay. The external monitor is also on, showing a code editor interface. The mechanical keyboard is likely connected wirelessly or via USB, although no visible cables can be confirmed from this angle. There appears to be a cable connecting the laptop to the monitor, likely for the display.",
+        "timestamp": "2025-04-13T05:46:34.219563"
+      }
+    },
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.5,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          210,
+          708,
+          822,
+          854
+        ],
+        "keyboard": [
+          533,
+          1274,
+          1026,
+          594
+        ],
+        "tv": [
+          763,
+          108,
+          962,
+          879
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9343827366828918,
+        "keyboard": 0.9138888120651245,
+        "tv": 0.8774117231369019
+      },
+      "frame_id": "3fb67dad",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/3fb67dad.jpg",
+      "llm_description": {
+        "description": "1) The visible electronic devices include a laptop, a mechanical keyboard, and a TV or monitor. \n\n2) Both the laptop and the TV/monitor are powered on. The laptop displays a login screen, suggesting it's in standby or locked mode, while the TV/monitor shows an active coding interface.\n\n3) The laptop and TV/monitor appear to be connected, likely through a cable or wireless link for display extension. The mechanical keyboard is a peripheral likely connected to the laptop, either wirelessly or through a hidden cable.\n\n4) The TV/monitor screen shows a coding environment, indicating active work or development, whereas the laptop screen displays a login interface.",
+        "timestamp": "2025-04-13T05:46:37.358456"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.0,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          180,
+          774,
+          822,
+          893
+        ],
+        "keyboard": [
+          508,
+          1299,
+          1022,
+          631
+        ],
+        "tv": [
+          675,
+          119,
+          1020,
+          910
+        ],
+        "mouse": [
+          1545,
+          1278,
+          182,
+          243
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8991072773933411,
+        "keyboard": 0.8501470685005188,
+        "tv": 0.8159836530685425,
+        "mouse": 0.7092224359512329
+      },
+      "frame_id": "78bb99df",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/78bb99df.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, an external keyboard, a TV functioning as a monitor, and a mouse. The laptop is powered on, displaying a screen with a battery icon indicating a charging status, while the TV/monitor is also on, displaying code within an editor, suggesting it receives input from the laptop. There appears to be a physical connection, likely an HDMI cable, linking the laptop to the TV/monitor. The keyboard is likely connected wirelessly or via cable to the laptop, as it is lit and positioned for use with the setup.",
+        "timestamp": "2025-04-13T05:46:42.378412"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.5,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          216,
+          931,
+          737,
+          701
+        ],
+        "keyboard": [
+          637,
+          1251,
+          722,
+          562
+        ],
+        "tv": [
+          671,
+          151,
+          1023,
+          883
+        ],
+        "mouse": [
+          1545,
+          1278,
+          182,
+          243
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9408560991287231,
+        "keyboard": 0.8987089991569519,
+        "tv": 0.860300600528717,
+        "mouse": 0.7092224359512329
+      },
+      "frame_id": "653139cf",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/653139cf.jpg",
+      "llm_description": {
+        "description": "The visible electronic devices in the frame include a laptop, an external keyboard, a TV serving as a monitor, and a mouse. Both the laptop and the TV monitor are powered on, with the laptop displaying content on its screen, indicating it might be either locked or in a transition state, while the TV displays a coding interface. The laptop appears to be connected to the TV via a cable, likely HDMI, and the external keyboard and mouse are peripherals, possibly wirelessly connected to the laptop. The external keyboard is positioned for use, suggesting active engagement with the devices.",
+        "timestamp": "2025-04-13T05:46:44.611711"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.0,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          321,
+          964,
+          630,
+          611
+        ],
+        "keyboard": [
+          666,
+          1294,
+          629,
+          444
+        ],
+        "tv": [
+          824,
+          776,
+          773,
+          431
+        ],
+        "mouse": [
+          1407,
+          1384,
+          125,
+          142
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8798466920852661,
+        "keyboard": 0.832001268863678,
+        "tv": 0.7754679322242737,
+        "mouse": 0.7872018814086914
+      },
+      "frame_id": "367adcd8",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/367adcd8.jpg",
+      "llm_description": {
+        "description": "The image displays a laptop, an external monitor, a keyboard, and a mouse on a desk. Both the laptop and monitor are powered on, with the monitor displaying code and the laptop showing a screen that appears to be a login or desktop view. A cable connects the laptop to the monitor, indicating a wired display setup. The mechanical keyboard and mouse are connected to the laptop, possibly wirelessly based on the lack of visible cables.",
+        "timestamp": "2025-04-13T05:46:44.880680"
+      }
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.5,
+      "objects": [
+        "tv",
+        "laptop",
+        "keyboard",
+        "mouse"
+      ],
+      "boxes": {
+        "tv": [
+          695,
+          779,
+          764,
+          497
+        ],
+        "laptop": [
+          321,
+          964,
+          630,
+          611
+        ],
+        "keyboard": [
+          666,
+          1294,
+          629,
+          444
+        ],
+        "mouse": [
+          1407,
+          1384,
+          125,
+          142
+        ]
+      },
+      "confidence": {
+        "tv": 0.45886215567588806,
+        "laptop": 0.8798466920852661,
+        "keyboard": 0.832001268863678,
+        "mouse": 0.7872018814086914
+      },
+      "frame_id": "a163200f",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/a163200f.jpg",
+      "llm_description": {
+        "description": "The visible electronic devices include a TV, which is powered on, displaying a sports event. No laptop, keyboard, or mouse are visible in this frame. There are no discernible connections or peripherals attached to the TV. The focus is on the television content, with no additional devices clearly powered on or interacting with the TV.",
+        "timestamp": "2025-04-13T05:46:49.058644"
+      }
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.5,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          695,
+          779,
+          764,
+          497
+        ]
+      },
+      "confidence": {
+        "tv": 0.45886215567588806
+      },
+      "frame_id": "a5b3c59c",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/a5b3c59c.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.0,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          524,
+          1115,
+          841,
+          470
+        ]
+      },
+      "confidence": {
+        "laptop": 0.5501497387886047
+      },
+      "frame_id": "1c20c0a8",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/1c20c0a8.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.5,
+      "objects": [
+        "laptop",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          524,
+          1115,
+          841,
+          470
+        ],
+        "mouse": [
+          1382,
+          1080,
+          146,
+          132
+        ]
+      },
+      "confidence": {
+        "laptop": 0.5501497387886047,
+        "mouse": 0.6186521649360657
+      },
+      "frame_id": "e2ae5542",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/e2ae5542.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.0,
+      "objects": [
+        "laptop",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          473,
+          937,
+          847,
+          719
+        ],
+        "mouse": [
+          1278,
+          1238,
+          144,
+          142
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9423750638961792,
+        "mouse": 0.4585913419723511
+      },
+      "frame_id": "185df31d",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/185df31d.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.5,
+      "objects": [
+        "laptop",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          450,
+          873,
+          851,
+          803
+        ],
+        "mouse": [
+          1278,
+          1238,
+          144,
+          142
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9432739615440369,
+        "mouse": 0.4585913419723511
+      },
+      "frame_id": "07c2c629",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/07c2c629.jpg"
+    },
+    {
+      "timestamp": "00:11",
+      "elapsed_time": 11.0,
+      "objects": [
+        "laptop",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          464,
+          926,
+          834,
+          742
+        ],
+        "mouse": [
+          1278,
+          1238,
+          144,
+          142
+        ]
+      },
+      "confidence": {
+        "laptop": 0.45428019762039185,
+        "mouse": 0.4585913419723511
+      },
+      "frame_id": "4e6b9f0e",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/4e6b9f0e.jpg"
+    },
+    {
+      "timestamp": "00:11",
+      "elapsed_time": 11.5,
+      "objects": [
+        "laptop",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          501,
+          964,
+          822,
+          676
+        ],
+        "mouse": [
+          1499,
+          980,
+          149,
+          131
+        ]
+      },
+      "confidence": {
+        "laptop": 0.526685893535614,
+        "mouse": 0.9061797261238098
+      },
+      "frame_id": "94015286",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/94015286.jpg"
+    },
+    {
+      "timestamp": "00:12",
+      "elapsed_time": 12.0,
+      "objects": [
+        "laptop",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          501,
+          964,
+          822,
+          676
+        ],
+        "mouse": [
+          461,
+          1296,
+          708,
+          402
+        ]
+      },
+      "confidence": {
+        "laptop": 0.526685893535614,
+        "mouse": 0.5461889505386353
+      },
+      "frame_id": "78097855",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/78097855.jpg"
+    },
+    {
+      "timestamp": "00:13",
+      "elapsed_time": 13.0,
+      "objects": [
+        "laptop",
+        "mouse",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          1564,
+          1299,
+          163,
+          303
+        ],
+        "mouse": [
+          461,
+          1296,
+          708,
+          402
+        ],
+        "tv": [
+          530,
+          903,
+          399,
+          272
+        ],
+        "keyboard": [
+          1567,
+          1456,
+          160,
+          140
+        ]
+      },
+      "confidence": {
+        "laptop": 0.6259176135063171,
+        "mouse": 0.5461889505386353,
+        "tv": 0.7381049394607544,
+        "keyboard": 0.4770577847957611
+      },
+      "frame_id": "9acf102b",
+      "image_path": "video_insights/bitcampvideo_20250413_054613/images/9acf102b.jpg"
+    }
+  ]
+}
