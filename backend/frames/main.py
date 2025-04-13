@@ -20,6 +20,7 @@ from datetime import datetime
 import threading
 from flask import Flask, jsonify, request, Response, send_file
 from flask_cors import CORS
+from openai import OpenAI
 
 # Import only the functions we need from main4
 from main4 import (
@@ -52,7 +53,32 @@ threshold = 30
 
 # Create Flask app
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+
+# More permissive CORS setup - allow all origins, methods, and headers
+CORS(app, resources={r"/*": {
+    "origins": "*", 
+    "methods": ["GET", "POST", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"]
+}}, supports_credentials=True)
+
+# Add explicit OPTIONS handler for the specific ask endpoint
+@app.route('/api/ask', methods=['OPTIONS'])
+def options_ask():
+    response = app.make_default_options_response()
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+    return response
+
+# General options handler for all other routes
+@app.route('/', defaults={'path': ''}, methods=['OPTIONS'])
+@app.route('/<path:path>', methods=['OPTIONS'])
+def options_handler(path):
+    response = app.make_default_options_response()
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+    return response
 
 @app.route('/api/status', methods=['GET'])
 def get_status():
@@ -344,7 +370,9 @@ def get_frame_image(frame_id):
                 break
         
         if not frame_path:
-            return jsonify({"error": "Frame not found"}), 404
+            response = jsonify({"error": "Frame not found"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 404
         
         # Return the image
         return send_file(frame_path, mimetype='image/jpeg')
@@ -352,6 +380,150 @@ def get_frame_image(frame_id):
     except Exception as e:
         print(f"Error getting frame image: {e}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/chat', methods=['POST', 'OPTIONS'])
+def chat():
+    """Simplified chat endpoint for frame analysis that avoids CORS issues"""
+    # Set CORS headers for preflight request
+    if request.method == 'OPTIONS':
+        response = app.make_default_options_response()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Max-Age', '3600')
+        return response
+        
+    try:
+        # For actual POST requests
+        data = request.json
+        if not data:
+            response = jsonify({"error": "No data provided"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 400
+            
+        frame_id = data.get('frame_id')
+        question = data.get('question')
+        conversation_history = data.get('conversation_history', [])
+        
+        if not frame_id or not question:
+            response = jsonify({"error": "Missing frame_id or question"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 400
+            
+        # Search for the frame
+        base_dir = "video_insights"
+        frame_path = None
+        frame_data = None
+        
+        # Find frame in any session
+        for session in os.listdir(base_dir):
+            session_dir = os.path.join(base_dir, session)
+            if not os.path.isdir(session_dir):
+                continue
+                
+            images_dir = os.path.join(session_dir, "images")
+            if not os.path.exists(images_dir):
+                continue
+                
+            potential_path = os.path.join(images_dir, f"{frame_id}.jpg")
+            if os.path.exists(potential_path):
+                frame_path = potential_path
+                
+                # Get frame metadata
+                keyframes_path = os.path.join(session_dir, "keyframes.json")
+                if os.path.exists(keyframes_path):
+                    with open(keyframes_path, 'r') as f:
+                        keyframes_data = json.load(f)
+                        for frame in keyframes_data.get('frames', []):
+                            if frame.get('frame_id') == frame_id:
+                                frame_data = frame
+                                break
+                break
+                
+        if not frame_path:
+            response = jsonify({"error": "Frame not found"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 404
+            
+        # Get objects from frame data
+        objects_text = "No objects detected"
+        if frame_data and frame_data.get('objects'):
+            objects_text = ", ".join(frame_data.get('objects'))
+            
+        # Import OpenAI
+        client = OpenAI()
+        
+        # Prepare conversation for API
+        messages = [
+            {"role": "system", "content": (
+                "You are an AI assistant skilled in analyzing video frames. "
+                "You'll be given information about objects detected in a frame and sometimes "
+                "asked questions about what's visible. Answer concisely and accurately based "
+                "on what's detectable in the frame. If you can't determine something from "
+                "the available information, acknowledge the limitation rather than speculating."
+            )}
+        ]
+        
+        # Add conversation history if provided
+        if conversation_history:
+            for msg in conversation_history:
+                messages.append({"role": msg["role"], "content": msg["content"]})
+        
+        # Add frame image as base64
+        import base64
+        with open(frame_path, "rb") as image_file:
+            base64_image = base64.b64encode(image_file.read()).decode('utf-8')
+            
+        # Add image context
+        frame_context = f"This frame contains the following detected objects: {objects_text}."
+        messages.append({
+            "role": "user",
+            "content": [
+                {"type": "text", "text": frame_context},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{base64_image}",
+                        "detail": "high"
+                    }
+                }
+            ]
+        })
+        
+        # Add user question
+        messages.append({"role": "user", "content": question})
+        
+        # Call GPT-4o
+        completion = client.chat.completions.create(
+            model="gpt-4o",
+            messages=messages,
+            max_tokens=1000
+        )
+        
+        answer = completion.choices[0].message.content
+        
+        # Prepare response
+        result = {
+            "answer": answer,
+            "frame_id": frame_id,
+            "timestamp": datetime.now().isoformat(),
+            "conversation": [
+                *conversation_history,
+                {"role": "user", "content": question},
+                {"role": "assistant", "content": answer}
+            ]
+        }
+        
+        # Create response with CORS headers
+        response = jsonify(result)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+        
+    except Exception as e:
+        print(f"Error in chat endpoint: {e}")
+        response = jsonify({"error": str(e)})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 500
 
 @app.route('/api/cameras/check', methods=['POST'])
 def check_camera():
@@ -402,6 +574,213 @@ def check_camera():
             "available": False,
             "error": f"Error checking camera: {str(e)}"
         })
+
+@app.route('/api/ping', methods=['GET', 'OPTIONS'])
+def ping():
+    """Simple endpoint to test CORS and connectivity"""
+    if request.method == 'OPTIONS':
+        response = app.make_default_options_response()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        return response
+        
+    response = jsonify({"status": "ok", "message": "Backend API is up and running"})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+@app.route('/api/frames/semantic-search', methods=['POST', 'OPTIONS'])
+def semantic_search_frames():
+    """Endpoint for semantic search across frames in a session using LLM descriptions"""
+    # Set CORS headers for preflight request
+    if request.method == 'OPTIONS':
+        response = app.make_default_options_response()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Max-Age', '3600')
+        return response
+        
+    try:
+        # For actual POST requests
+        data = request.json
+        if not data:
+            response = jsonify({"error": "No data provided"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 400
+            
+        session_id = data.get('session_id')
+        query = data.get('query')
+        
+        if not session_id or not query:
+            response = jsonify({"error": "Missing session_id or query"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 400
+            
+        # Find the session directory
+        base_dir = "video_insights"
+        session_dir = os.path.join(base_dir, session_id)
+        
+        if not os.path.isdir(session_dir):
+            response = jsonify({"error": f"Session {session_id} not found"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 404
+            
+        # Load keyframes data
+        keyframes_path = os.path.join(session_dir, "keyframes.json")
+        if not os.path.exists(keyframes_path):
+            response = jsonify({"error": f"Keyframes data not found for session {session_id}"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 404
+            
+        with open(keyframes_path, 'r') as f:
+            keyframes_data = json.load(f)
+            
+        # Extract frames with their descriptions
+        frames = keyframes_data.get('frames', [])
+        
+        # Extract descriptions and prepare for embedding comparison
+        frame_texts = []
+        for frame in frames:
+            # Skip frames without LLM descriptions
+            if not frame.get('llm_description'):
+                continue
+                
+            # Get the description text
+            description = frame.get('llm_description', {}).get('description', '')
+            
+            # Also include detected objects to enhance search
+            objects = ', '.join(frame.get('objects', []))
+            
+            # Skip frames without meaningful content to search
+            if not description and not objects:
+                continue
+                
+            # Combine description and objects
+            text = f"Objects: {objects}. Description: {description}"
+            
+            # Add to the list of texts to compare
+            frame_texts.append({
+                'id': frame.get('frame_id'),
+                'text': text,
+                'frame': frame
+            })
+            
+        if not frame_texts:
+            response = jsonify({"error": "No frames with descriptions found in this session"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 404
+        
+        # Use OpenAI embeddings to find semantically similar frames
+        client = OpenAI()
+        # First, get embedding for the query
+        embedding_response = client.embeddings.create(
+            model="text-embedding-ada-002",
+            input=query
+        )
+        query_embedding = embedding_response.data[0].embedding
+        
+        # Then, get embeddings for each frame
+        frame_embeddings = []
+        
+        # Process in batches to avoid rate limits
+        batch_size = 20
+        for i in range(0, len(frame_texts), batch_size):
+            batch = frame_texts[i:min(i+batch_size, len(frame_texts))]
+            batch_texts = [item['text'] for item in batch]
+            
+            embedding_response = client.embeddings.create(
+                model="text-embedding-ada-002",
+                input=batch_texts
+            )
+            
+            for j, embedding_data in enumerate(embedding_response.data):
+                frame_embeddings.append({
+                    'id': batch[j]['id'],
+                    'embedding': embedding_data.embedding,
+                    'frame': batch[j]['frame']
+                })
+        
+        # Calculate similarity scores (cosine similarity)
+        from scipy.spatial.distance import cosine
+        
+        # Convert query embedding to numpy array
+        query_embedding_np = np.array(query_embedding)
+        
+        # Calculate similarity for each frame
+        frame_similarities = []
+        for frame_data in frame_embeddings:
+            # Convert frame embedding to numpy array
+            frame_embedding_np = np.array(frame_data['embedding'])
+            
+            # Calculate cosine similarity (1 - cosine distance)
+            similarity = 1 - cosine(query_embedding_np, frame_embedding_np)
+            
+            # Add to results
+            frame_similarities.append({
+                'id': frame_data['id'],
+                'similarity': float(similarity),
+                'frame': frame_data['frame']
+            })
+            
+        # Sort by similarity (highest first)
+        sorted_frames = sorted(frame_similarities, key=lambda x: x['similarity'], reverse=True)
+        
+        # Take top 5 results
+        top_results = sorted_frames[:5]
+        
+        # Generate explanations for why each frame matches the query
+        for result in top_results:
+            # Create explanation prompt
+            explanation_prompt = f"""
+            Analyze this video frame and explain why it matches the user's search query:
+            
+            User Query: "{query}"
+            
+            Frame Content:
+            - Detected Objects: {', '.join(result['frame'].get('objects', []))}
+            - Frame Description: {result['frame'].get('llm_description', {}).get('description', 'No description available')}
+            
+            Provide a short, 1-2 sentence explanation of why this frame is relevant to the search query.
+            Focus only on the most important aspects that match the query.
+            """
+            
+            # Get explanation from GPT
+            explanation_response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": explanation_prompt}],
+                max_tokens=100
+            )
+            
+            # Add explanation to result
+            result['explanation'] = explanation_response.choices[0].message.content.strip()
+            
+        # Format the response
+        response_data = {
+            "results": [{
+                "id": result['id'],
+                "similarity": result['similarity'],
+                "timestamp": result['frame'].get('timestamp', ''),
+                "objects": result['frame'].get('objects', []),
+                "explanation": result.get('explanation', ''),
+                # Include other necessary frame data
+                "confidence": result['frame'].get('confidence', 0)
+            } for result in top_results]
+        }
+        
+        # Add CORS headers to the response
+        response = jsonify(response_data)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+        
+    except Exception as e:
+        print(f"Error in semantic search: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
+        response = jsonify({"error": f"An error occurred: {str(e)}"})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 500
 
 def update_latest_frame(frame, detections):
     """Update the latest frame and detections for HTTP API"""
