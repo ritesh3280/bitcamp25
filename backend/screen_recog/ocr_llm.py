@@ -4,8 +4,9 @@ import openai
 import os
 import glob
 from dotenv import load_dotenv
+import concurrent.futures
 
-# Load environment variables (e.g., your OpenAI API key)
+# Load environment variables
 load_dotenv()
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -13,29 +14,25 @@ client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 # Function 1: OCR - Extract text from one image
 # -----------------------------------------------------------
 def extract_text_from_image(image_path):
-    """
-    Runs OCR on a given image and returns a dict with frame ID and extracted text.
-    """
     frame_id = os.path.splitext(os.path.basename(image_path))[0]
-
     image = cv2.imread(image_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
     text = pytesseract.image_to_string(thresh).strip()
+    return {"frame_id": frame_id, "text": text}
 
-    return {
-        "frame_id": frame_id,
-        "text": text
-    }
+# -----------------------------------------------------------
+# Helper: Split a dictionary into chunks
+# -----------------------------------------------------------
+def chunk_dict(data, chunk_size):
+    items = list(data.items())
+    for i in range(0, len(items), chunk_size):
+        yield dict(items[i:i + chunk_size])
 
 # -----------------------------------------------------------
 # Function 2: LLM - Analyze batch of OCR results as forensic JSON
 # -----------------------------------------------------------
 def describe_batch_keyframes_llm(ocr_results: dict):
-    """
-    Given a dict of {frame_id: text}, sends to LLM for JSON-based screen analysis.
-    Returns JSON string with one object per frame.
-    """
     prompt_entries = "\n".join(
         f"Frame ID: {frame_id}\nText:\n\"\"\"{text}\"\"\"\n"
         for frame_id, text in ocr_results.items()
@@ -53,8 +50,8 @@ For each frame:
   - If **no red flags** are found, leave the list empty (`"red_flags": []`)
   - If present, each red flag must include:
     - a `"flag"` (short title)
-    - a `"description"` (why it’s suspicious in a digital forensics context)
-- Finish with a **relevance_to_investigation** statement — explain how or why this frame might matter to a forensic analyst.
+    - a `"description"` (explain why it’s suspicious in a digital forensics context)
+- Finish with a **relevance_to_investigation** statement — description how or why this frame might matter to a forensic analyst.
 
 Respond ONLY with valid JSON in the following format:
 
@@ -82,37 +79,44 @@ Here are the screen texts:
 
 Respond ONLY with valid JSON.
 """
-
-
     response = client.chat.completions.create(
-        model="gpt-4o",  # Change to "gpt-4" if needed
+        model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
         temperature=0,
         response_format={"type": "json_object"}
     )
-
     return response.choices[0].message.content
 
 # -----------------------------------------------------------
-# Function 3: Wrapper - Process keyframes with OCR + LLM
+# Function 3: Parallel Batching for Faster LLM Calls
+# -----------------------------------------------------------
+def describe_in_parallel(ocr_results, batch_size=5):
+    batches = list(chunk_dict(ocr_results, batch_size))
+    results = []
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [executor.submit(describe_batch_keyframes_llm, batch) for batch in batches]
+        for future in concurrent.futures.as_completed(futures):
+            results.append(future.result())
+
+    return results
+
+# -----------------------------------------------------------
+# Function 4: Wrapper - Process keyframes with OCR + LLM
 # -----------------------------------------------------------
 def process_keyframes_with_llm(image_paths):
-    """
-    Given a list of image paths (keyframes), this:
-    1. Extracts OCR text for each
-    2. Sends the batch to an LLM for forensic screen analysis
-    3. Returns JSON response from the LLM
-    """
     ocr_results = {}
     for path in image_paths:
         result = extract_text_from_image(path)
         ocr_results[result["frame_id"]] = result["text"]
 
-    return describe_batch_keyframes_llm(ocr_results)
+    return describe_in_parallel(ocr_results)
 
+# -----------------------------------------------------------
+# Main Execution
+# -----------------------------------------------------------
 keyframe_paths = sorted(glob.glob("images/*"))
-
 output = process_keyframes_with_llm(keyframe_paths)
-print(output)
 
-
+for batch_output in output:
+    print(batch_output)

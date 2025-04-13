@@ -1,0 +1,1596 @@
+{
+  "metadata": {
+    "created": "2025-04-12T19:46:24.476887",
+    "version": "1.0"
+  },
+  "frames": [
+    {
+      "timestamp": "00:00",
+      "elapsed_time": 0.03381919860839844,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          678,
+          473,
+          344,
+          598
+        ],
+        "tv": [
+          839,
+          30,
+          439,
+          623
+        ]
+      },
+      "confidence": {
+        "laptop": 0.859150767326355,
+        "tv": 0.8362656831741333
+      },
+      "frame_id": "15d1f2ec",
+      "image_path": "video_insights/live_session_20250412_194624/images/15d1f2ec.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop and a TV, both powered on. The laptop screen displays a desktop with a landscape image, while the TV shows a code editor with visible script lines. A wired mechanical keyboard is connected, likely to the laptop, and there are cables visible, indicating possible wired connections between the devices. The setup suggests an integrated use of both screens for programming tasks.",
+        "timestamp": "2025-04-12T19:46:30.756975"
+      }
+    },
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.1865689754486084,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          678,
+          478,
+          347,
+          592
+        ],
+        "tv": [
+          824,
+          29,
+          453,
+          631
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8364201188087463,
+        "tv": 0.7917777299880981
+      },
+      "frame_id": "f4bdc8e7",
+      "image_path": "video_insights/live_session_20250412_194624/images/f4bdc8e7.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop and a monitor, both powered on and displaying content. The laptop screen appears to show a desktop background, while the monitor displays a code editor with highlighted code. A wired connection can be inferred between the laptop and the monitor, although the exact cable is not visible. A mechanical keyboard is connected to the laptop, indicating interaction capability.",
+        "timestamp": "2025-04-12T19:46:32.000617"
+      }
+    },
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.7918620109558105,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          677,
+          479,
+          348,
+          591
+        ],
+        "tv": [
+          817,
+          31,
+          460,
+          624
+        ],
+        "keyboard": [
+          985,
+          862,
+          291,
+          214
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8566931486129761,
+        "tv": 0.7961200475692749,
+        "keyboard": 0.49720245599746704
+      },
+      "frame_id": "07c3487e",
+      "image_path": "video_insights/live_session_20250412_194624/images/07c3487e.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, TV, and keyboard; all appear to be powered on. The laptop screen displays a desktop background, while the TV screen shows a mirrored or extended desktop with open applications. There are visible cables suggesting a connection between the laptop and the TV, potentially for screen sharing. The keyboard is connected to the laptop as a peripheral, likely via a wired connection.",
+        "timestamp": "2025-04-12T19:46:33.035575"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.4241199493408203,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          677,
+          480,
+          352,
+          590
+        ],
+        "tv": [
+          814,
+          42,
+          462,
+          610
+        ],
+        "keyboard": [
+          677,
+          760,
+          248,
+          239
+        ]
+      },
+      "confidence": {
+        "laptop": 0.6113057732582092,
+        "tv": 0.842245876789093,
+        "keyboard": 0.45240360498428345
+      },
+      "frame_id": "97adc295",
+      "image_path": "video_insights/live_session_20250412_194624/images/97adc295.jpg",
+      "llm_description": {
+        "description": "The frame shows three electronic devices: a laptop, a TV/monitor, and a keyboard. Both the laptop and TV/monitor screens are on, displaying a desktop interface and what appears to be a screen mirroring from the laptop. The keyboard is connected to the laptop, likely via a cable, as a physical connection is visible. There are no visible peripherals other than the keyboard, and no clear indication of additional connections between the devices beyond the display mirroring.",
+        "timestamp": "2025-04-12T19:46:35.177382"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.924004077911377,
+      "objects": [
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "tv": [
+          821,
+          50,
+          454,
+          601
+        ],
+        "keyboard": [
+          677,
+          760,
+          248,
+          239
+        ]
+      },
+      "confidence": {
+        "tv": 0.5527722239494324,
+        "keyboard": 0.45240360498428345
+      },
+      "frame_id": "e69b1bde",
+      "image_path": "video_insights/live_session_20250412_194624/images/e69b1bde.jpg",
+      "llm_description": {
+        "description": "The frame shows a keyboard, a laptop, and a monitor. The laptop is powered on, as indicated by its display showing some on-screen content; it appears to be mirroring or extending to an external monitor, which is also on and displaying similar content. The keyboard is connected to the laptop, likely via a cable, given its proximity, although the connection type is not visible. No other peripherals or connections are clearly visible in the image.",
+        "timestamp": "2025-04-12T19:46:36.435375"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.0521368980407715,
+      "objects": [
+        "tv",
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          821,
+          50,
+          454,
+          601
+        ],
+        "keyboard": [
+          680,
+          757,
+          421,
+          278
+        ],
+        "laptop": [
+          677,
+          403,
+          563,
+          655
+        ]
+      },
+      "confidence": {
+        "tv": 0.5527722239494324,
+        "keyboard": 0.6984650492668152,
+        "laptop": 0.8405152559280396
+      },
+      "frame_id": "d45df591",
+      "image_path": "video_insights/live_session_20250412_194624/images/d45df591.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, an external monitor, and a keyboard. The laptop is powered on, displaying an interface with a window showing a mirrored screen or video call, and the monitor is likely connected wirelessly or via a hidden cable as it displays an image. The keyboard appears to be connected to the laptop, potentially via USB, as indicated by its proximity and positioning. No visible cables confirm the connection explicitly, but the setup suggests typical peripheral linkage to the laptop.",
+        "timestamp": "2025-04-12T19:46:36.255173"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.352430105209351,
+      "objects": [
+        "tv",
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          852,
+          51,
+          423,
+          585
+        ],
+        "keyboard": [
+          697,
+          761,
+          463,
+          287
+        ],
+        "laptop": [
+          678,
+          401,
+          549,
+          626
+        ]
+      },
+      "confidence": {
+        "tv": 0.46459415555000305,
+        "keyboard": 0.8057365417480469,
+        "laptop": 0.9221485257148743
+      },
+      "frame_id": "8354f987",
+      "image_path": "video_insights/live_session_20250412_194624/images/8354f987.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop, a mechanical keyboard, and a TV or monitor. The laptop is powered on, displaying a video call or streaming app on the screen. The keyboard appears to be in use, potentially connected to the laptop via a visible cable. There is no visible data on the TV or monitor display, suggesting it might be powered off or not receiving input.",
+        "timestamp": "2025-04-12T19:46:39.067680"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.652311086654663,
+      "objects": [
+        "tv",
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          885,
+          56,
+          391,
+          565
+        ],
+        "keyboard": [
+          723,
+          774,
+          466,
+          281
+        ],
+        "laptop": [
+          681,
+          405,
+          541,
+          614
+        ]
+      },
+      "confidence": {
+        "tv": 0.42132121324539185,
+        "keyboard": 0.8179776072502136,
+        "laptop": 0.9464994668960571
+      },
+      "frame_id": "1979eba0",
+      "image_path": "video_insights/live_session_20250412_194624/images/1979eba0.jpg",
+      "llm_description": {
+        "description": "The frame shows a laptop with the screen powered on, displaying a mirrored image of a smartphone. A TV or monitor is present to the right, but it's turned off. A mechanical keyboard is in the foreground, seemingly connected to the laptop via cable, visible from its wired connection. No wireless connections or additional peripherals are observable in this frame.",
+        "timestamp": "2025-04-12T19:46:40.398420"
+      }
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.285204887390137,
+      "objects": [
+        "tv",
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          905,
+          65,
+          371,
+          552
+        ],
+        "keyboard": [
+          714,
+          789,
+          492,
+          269
+        ],
+        "laptop": [
+          679,
+          424,
+          514,
+          608
+        ]
+      },
+      "confidence": {
+        "tv": 0.5169838070869446,
+        "keyboard": 0.6743270754814148,
+        "laptop": 0.7453880906105042
+      },
+      "frame_id": "ff94820d",
+      "image_path": "video_insights/live_session_20250412_194624/images/ff94820d.jpg",
+      "llm_description": {
+        "description": "The frame shows a TV, a laptop, and a keyboard, all apparently powered on. The laptop and TV screens are activated, displaying various application icons and potentially mirroring content. The keyboard is connected to the laptop, likely via a wired USB connection, as no other visible connections are apparent. The TV seems connected to the laptop, possibly via HDMI or a similar link, given the mirrored display content.",
+        "timestamp": "2025-04-12T19:46:39.685894"
+      }
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.586278915405273,
+      "objects": [
+        "tv",
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          915,
+          76,
+          361,
+          545
+        ],
+        "keyboard": [
+          708,
+          798,
+          510,
+          262
+        ],
+        "laptop": [
+          679,
+          435,
+          494,
+          603
+        ]
+      },
+      "confidence": {
+        "tv": 0.8560651540756226,
+        "keyboard": 0.588864803314209,
+        "laptop": 0.8008061647415161
+      },
+      "frame_id": "4c6ac64c",
+      "image_path": "video_insights/live_session_20250412_194624/images/4c6ac64c.jpg",
+      "llm_description": {
+        "description": "The frame shows a TV or monitor, a laptop, and a keyboard. Both the TV/monitor and laptop are powered on; the monitor displays a code editor with text, while the laptop shows a multimedia application, possibly a video or video call. The keyboard is likely connected to the laptop, possibly via USB, due to its proximity and positioning. There are no visible cables directly connecting the monitor to the laptop, suggesting a possible wireless connection or hidden cables.",
+        "timestamp": "2025-04-12T19:46:43.572367"
+      }
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.857308864593506,
+      "objects": [
+        "tv",
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          922,
+          87,
+          354,
+          534
+        ],
+        "keyboard": [
+          704,
+          805,
+          522,
+          256
+        ],
+        "laptop": [
+          679,
+          445,
+          474,
+          597
+        ]
+      },
+      "confidence": {
+        "tv": 0.8208730220794678,
+        "keyboard": 0.601832389831543,
+        "laptop": 0.4883597493171692
+      },
+      "frame_id": "8b567bb3",
+      "image_path": "video_insights/live_session_20250412_194624/images/8b567bb3.jpg"
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.485152006149292,
+      "objects": [
+        "tv",
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          930,
+          98,
+          348,
+          524
+        ],
+        "keyboard": [
+          704,
+          805,
+          522,
+          256
+        ],
+        "laptop": [
+          678,
+          466,
+          435,
+          581
+        ]
+      },
+      "confidence": {
+        "tv": 0.8569179177284241,
+        "keyboard": 0.601832389831543,
+        "laptop": 0.8854458928108215
+      },
+      "frame_id": "fba8b168",
+      "image_path": "video_insights/live_session_20250412_194624/images/fba8b168.jpg"
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.651864051818848,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          930,
+          98,
+          348,
+          524
+        ],
+        "laptop": [
+          678,
+          466,
+          435,
+          581
+        ]
+      },
+      "confidence": {
+        "tv": 0.8569179177284241,
+        "laptop": 0.8854458928108215
+      },
+      "frame_id": "6020d965",
+      "image_path": "video_insights/live_session_20250412_194624/images/6020d965.jpg"
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.7860658168792725,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          923,
+          89,
+          355,
+          536
+        ],
+        "laptop": [
+          678,
+          477,
+          414,
+          579
+        ]
+      },
+      "confidence": {
+        "tv": 0.8216804265975952,
+        "laptop": 0.8239716291427612
+      },
+      "frame_id": "85a3d2ed",
+      "image_path": "video_insights/live_session_20250412_194624/images/85a3d2ed.jpg"
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.085315942764282,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          888,
+          87,
+          390,
+          554
+        ],
+        "laptop": [
+          677,
+          485,
+          396,
+          579
+        ]
+      },
+      "confidence": {
+        "tv": 0.8257785439491272,
+        "laptop": 0.8833088874816895
+      },
+      "frame_id": "2154bc1d",
+      "image_path": "video_insights/live_session_20250412_194624/images/2154bc1d.jpg"
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.386116981506348,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          851,
+          81,
+          427,
+          574
+        ],
+        "laptop": [
+          677,
+          488,
+          377,
+          579
+        ]
+      },
+      "confidence": {
+        "tv": 0.8148579597473145,
+        "laptop": 0.8891181349754333
+      },
+      "frame_id": "17a06e46",
+      "image_path": "video_insights/live_session_20250412_194624/images/17a06e46.jpg"
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.685934066772461,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          828,
+          70,
+          450,
+          589
+        ],
+        "laptop": [
+          677,
+          488,
+          366,
+          581
+        ]
+      },
+      "confidence": {
+        "tv": 0.8287303447723389,
+        "laptop": 0.9025238156318665
+      },
+      "frame_id": "156d6baa",
+      "image_path": "video_insights/live_session_20250412_194624/images/156d6baa.jpg"
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.98659086227417,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          815,
+          56,
+          463,
+          601
+        ],
+        "laptop": [
+          678,
+          484,
+          359,
+          586
+        ]
+      },
+      "confidence": {
+        "tv": 0.8351262807846069,
+        "laptop": 0.9064785838127136
+      },
+      "frame_id": "1a427c47",
+      "image_path": "video_insights/live_session_20250412_194624/images/1a427c47.jpg"
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.285629987716675,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          804,
+          41,
+          474,
+          613
+        ],
+        "laptop": [
+          678,
+          477,
+          359,
+          593
+        ]
+      },
+      "confidence": {
+        "tv": 0.8450102210044861,
+        "laptop": 0.9174386858940125
+      },
+      "frame_id": "af592cf2",
+      "image_path": "video_insights/live_session_20250412_194624/images/af592cf2.jpg"
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.586661100387573,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          796,
+          26,
+          482,
+          626
+        ],
+        "laptop": [
+          678,
+          471,
+          357,
+          599
+        ]
+      },
+      "confidence": {
+        "tv": 0.8450883626937866,
+        "laptop": 0.9173053503036499
+      },
+      "frame_id": "37b973c4",
+      "image_path": "video_insights/live_session_20250412_194624/images/37b973c4.jpg"
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.920623064041138,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          789,
+          12,
+          489,
+          637
+        ],
+        "laptop": [
+          678,
+          463,
+          357,
+          607
+        ]
+      },
+      "confidence": {
+        "tv": 0.8401170969009399,
+        "laptop": 0.9177404046058655
+      },
+      "frame_id": "d29037b5",
+      "image_path": "video_insights/live_session_20250412_194624/images/d29037b5.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.525899887084961,
+      "objects": [
+        "tv",
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "tv": [
+          783,
+          6,
+          495,
+          631
+        ],
+        "laptop": [
+          678,
+          455,
+          353,
+          615
+        ],
+        "keyboard": [
+          771,
+          775,
+          506,
+          297
+        ]
+      },
+      "confidence": {
+        "tv": 0.8464136123657227,
+        "laptop": 0.9142434597015381,
+        "keyboard": 0.5905839204788208
+      },
+      "frame_id": "0d6c4d2a",
+      "image_path": "video_insights/live_session_20250412_194624/images/0d6c4d2a.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.285117864608765,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          783,
+          3,
+          495,
+          626
+        ],
+        "laptop": [
+          678,
+          450,
+          354,
+          620
+        ]
+      },
+      "confidence": {
+        "tv": 0.8535102009773254,
+        "laptop": 0.9284350872039795
+      },
+      "frame_id": "d8b2dad4",
+      "image_path": "video_insights/live_session_20250412_194624/images/d8b2dad4.jpg"
+    },
+    {
+      "timestamp": "00:12",
+      "elapsed_time": 12.552412986755371,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          798,
+          4,
+          479,
+          625
+        ],
+        "laptop": [
+          678,
+          449,
+          366,
+          621
+        ]
+      },
+      "confidence": {
+        "tv": 0.836161196231842,
+        "laptop": 0.9337490200996399
+      },
+      "frame_id": "1ba1677e",
+      "image_path": "video_insights/live_session_20250412_194624/images/1ba1677e.jpg"
+    },
+    {
+      "timestamp": "00:13",
+      "elapsed_time": 13.457749843597412,
+      "objects": [
+        "tv",
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "tv": [
+          801,
+          5,
+          476,
+          622
+        ],
+        "laptop": [
+          678,
+          452,
+          370,
+          618
+        ],
+        "keyboard": [
+          820,
+          790,
+          457,
+          282
+        ]
+      },
+      "confidence": {
+        "tv": 0.8067899942398071,
+        "laptop": 0.9329850077629089,
+        "keyboard": 0.4193706810474396
+      },
+      "frame_id": "8710a9a6",
+      "image_path": "video_insights/live_session_20250412_194624/images/8710a9a6.jpg"
+    },
+    {
+      "timestamp": "00:14",
+      "elapsed_time": 14.218177080154419,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          801,
+          6,
+          476,
+          622
+        ],
+        "laptop": [
+          678,
+          454,
+          372,
+          616
+        ]
+      },
+      "confidence": {
+        "tv": 0.8124340176582336,
+        "laptop": 0.9218606352806091
+      },
+      "frame_id": "d83f69e8",
+      "image_path": "video_insights/live_session_20250412_194624/images/d83f69e8.jpg"
+    },
+    {
+      "timestamp": "00:15",
+      "elapsed_time": 15.85758090019226,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          790,
+          13,
+          487,
+          629
+        ],
+        "laptop": [
+          678,
+          465,
+          370,
+          606
+        ]
+      },
+      "confidence": {
+        "tv": 0.8096693754196167,
+        "laptop": 0.9027945399284363
+      },
+      "frame_id": "0034f5fb",
+      "image_path": "video_insights/live_session_20250412_194624/images/0034f5fb.jpg"
+    },
+    {
+      "timestamp": "00:21",
+      "elapsed_time": 21.920252799987793,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          796,
+          24,
+          482,
+          619
+        ],
+        "laptop": [
+          678,
+          476,
+          378,
+          594
+        ]
+      },
+      "confidence": {
+        "tv": 0.8223552107810974,
+        "laptop": 0.9034863710403442
+      },
+      "frame_id": "5cc52135",
+      "image_path": "video_insights/live_session_20250412_194624/images/5cc52135.jpg"
+    },
+    {
+      "timestamp": "00:29",
+      "elapsed_time": 29.251883029937744,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          822,
+          23,
+          456,
+          610
+        ],
+        "laptop": [
+          678,
+          470,
+          397,
+          599
+        ]
+      },
+      "confidence": {
+        "tv": 0.723137617111206,
+        "laptop": 0.9081106781959534
+      },
+      "frame_id": "5fd9ea9b",
+      "image_path": "video_insights/live_session_20250412_194624/images/5fd9ea9b.jpg"
+    },
+    {
+      "timestamp": "00:29",
+      "elapsed_time": 29.552037000656128,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          842,
+          23,
+          436,
+          609
+        ],
+        "laptop": [
+          678,
+          466,
+          414,
+          604
+        ]
+      },
+      "confidence": {
+        "tv": 0.7640542387962341,
+        "laptop": 0.9006040692329407
+      },
+      "frame_id": "54d879e8",
+      "image_path": "video_insights/live_session_20250412_194624/images/54d879e8.jpg"
+    },
+    {
+      "timestamp": "00:29",
+      "elapsed_time": 29.85200786590576,
+      "objects": [
+        "tv",
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "tv": [
+          866,
+          24,
+          412,
+          609
+        ],
+        "laptop": [
+          678,
+          462,
+          431,
+          608
+        ],
+        "keyboard": [
+          682,
+          880,
+          595,
+          191
+        ]
+      },
+      "confidence": {
+        "tv": 0.7484872341156006,
+        "laptop": 0.9212143421173096,
+        "keyboard": 0.41790321469306946
+      },
+      "frame_id": "2028fe0d",
+      "image_path": "video_insights/live_session_20250412_194624/images/2028fe0d.jpg"
+    },
+    {
+      "timestamp": "00:30",
+      "elapsed_time": 30.15249991416931,
+      "objects": [
+        "tv",
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "tv": [
+          890,
+          25,
+          388,
+          606
+        ],
+        "laptop": [
+          678,
+          458,
+          448,
+          613
+        ],
+        "keyboard": [
+          682,
+          880,
+          595,
+          191
+        ]
+      },
+      "confidence": {
+        "tv": 0.7242729067802429,
+        "laptop": 0.9202818870544434,
+        "keyboard": 0.41790321469306946
+      },
+      "frame_id": "44b4f976",
+      "image_path": "video_insights/live_session_20250412_194624/images/44b4f976.jpg"
+    },
+    {
+      "timestamp": "00:30",
+      "elapsed_time": 30.451951026916504,
+      "objects": [
+        "tv",
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "tv": [
+          914,
+          25,
+          365,
+          605
+        ],
+        "laptop": [
+          678,
+          454,
+          466,
+          617
+        ],
+        "keyboard": [
+          682,
+          880,
+          595,
+          191
+        ]
+      },
+      "confidence": {
+        "tv": 0.7455925941467285,
+        "laptop": 0.923391580581665,
+        "keyboard": 0.41790321469306946
+      },
+      "frame_id": "c192a590",
+      "image_path": "video_insights/live_session_20250412_194624/images/c192a590.jpg"
+    },
+    {
+      "timestamp": "00:30",
+      "elapsed_time": 30.617971897125244,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          914,
+          25,
+          365,
+          605
+        ],
+        "laptop": [
+          678,
+          454,
+          466,
+          617
+        ]
+      },
+      "confidence": {
+        "tv": 0.7455925941467285,
+        "laptop": 0.923391580581665
+      },
+      "frame_id": "75e5c175",
+      "image_path": "video_insights/live_session_20250412_194624/images/75e5c175.jpg"
+    },
+    {
+      "timestamp": "00:30",
+      "elapsed_time": 30.752219200134277,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          939,
+          25,
+          340,
+          605
+        ],
+        "laptop": [
+          678,
+          449,
+          484,
+          622
+        ]
+      },
+      "confidence": {
+        "tv": 0.7581793069839478,
+        "laptop": 0.9246182441711426
+      },
+      "frame_id": "b96834a5",
+      "image_path": "video_insights/live_session_20250412_194624/images/b96834a5.jpg"
+    },
+    {
+      "timestamp": "00:31",
+      "elapsed_time": 31.085487127304077,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          962,
+          27,
+          317,
+          604
+        ],
+        "laptop": [
+          678,
+          445,
+          501,
+          627
+        ]
+      },
+      "confidence": {
+        "tv": 0.7353612184524536,
+        "laptop": 0.930048942565918
+      },
+      "frame_id": "2ddcc029",
+      "image_path": "video_insights/live_session_20250412_194624/images/2ddcc029.jpg"
+    },
+    {
+      "timestamp": "00:31",
+      "elapsed_time": 31.386296033859253,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          980,
+          27,
+          299,
+          607
+        ],
+        "laptop": [
+          678,
+          443,
+          513,
+          630
+        ]
+      },
+      "confidence": {
+        "tv": 0.7279149293899536,
+        "laptop": 0.922806978225708
+      },
+      "frame_id": "509f649a",
+      "image_path": "video_insights/live_session_20250412_194624/images/509f649a.jpg"
+    },
+    {
+      "timestamp": "00:32",
+      "elapsed_time": 32.28546714782715,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          995,
+          28,
+          284,
+          608
+        ],
+        "laptop": [
+          678,
+          440,
+          521,
+          633
+        ]
+      },
+      "confidence": {
+        "tv": 0.7506515383720398,
+        "laptop": 0.9302697777748108
+      },
+      "frame_id": "cc0e8f8c",
+      "image_path": "video_insights/live_session_20250412_194624/images/cc0e8f8c.jpg"
+    },
+    {
+      "timestamp": "00:34",
+      "elapsed_time": 34.72096085548401,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          1014,
+          28,
+          265,
+          602
+        ],
+        "laptop": [
+          678,
+          439,
+          533,
+          634
+        ]
+      },
+      "confidence": {
+        "tv": 0.6541318297386169,
+        "laptop": 0.9588885307312012
+      },
+      "frame_id": "567f1c3e",
+      "image_path": "video_insights/live_session_20250412_194624/images/567f1c3e.jpg"
+    },
+    {
+      "timestamp": "00:35",
+      "elapsed_time": 35.48460388183594,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          698,
+          433,
+          532,
+          638
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8790475130081177
+      },
+      "frame_id": "a44cbe84",
+      "image_path": "video_insights/live_session_20250412_194624/images/a44cbe84.jpg"
+    },
+    {
+      "timestamp": "00:35",
+      "elapsed_time": 35.62501811981201,
+      "objects": [
+        "laptop",
+        "cell phone"
+      ],
+      "boxes": {
+        "laptop": [
+          729,
+          430,
+          511,
+          637
+        ],
+        "cell phone": [
+          1070,
+          462,
+          125,
+          197
+        ]
+      },
+      "confidence": {
+        "laptop": 0.4060862362384796,
+        "cell phone": 0.412925124168396
+      },
+      "frame_id": "fa9bbfd8",
+      "image_path": "video_insights/live_session_20250412_194624/images/fa9bbfd8.jpg"
+    },
+    {
+      "timestamp": "00:35",
+      "elapsed_time": 35.91980695724487,
+      "objects": [
+        "laptop",
+        "cell phone"
+      ],
+      "boxes": {
+        "laptop": [
+          767,
+          429,
+          483,
+          626
+        ],
+        "cell phone": [
+          1070,
+          462,
+          125,
+          197
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7367089986801147,
+        "cell phone": 0.412925124168396
+      },
+      "frame_id": "f05a256d",
+      "image_path": "video_insights/live_session_20250412_194624/images/f05a256d.jpg"
+    },
+    {
+      "timestamp": "00:36",
+      "elapsed_time": 36.21875596046448,
+      "objects": [
+        "laptop",
+        "cell phone"
+      ],
+      "boxes": {
+        "laptop": [
+          809,
+          428,
+          451,
+          616
+        ],
+        "cell phone": [
+          1070,
+          462,
+          125,
+          197
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7693389654159546,
+        "cell phone": 0.412925124168396
+      },
+      "frame_id": "3fecf014",
+      "image_path": "video_insights/live_session_20250412_194624/images/3fecf014.jpg"
+    },
+    {
+      "timestamp": "00:36",
+      "elapsed_time": 36.38563895225525,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          809,
+          428,
+          451,
+          616
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7693389654159546
+      },
+      "frame_id": "ac9ebc1e",
+      "image_path": "video_insights/live_session_20250412_194624/images/ac9ebc1e.jpg"
+    },
+    {
+      "timestamp": "00:36",
+      "elapsed_time": 36.51970601081848,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          854,
+          429,
+          414,
+          605
+        ]
+      },
+      "confidence": {
+        "laptop": 0.5762873888015747
+      },
+      "frame_id": "632f3369",
+      "image_path": "video_insights/live_session_20250412_194624/images/632f3369.jpg"
+    },
+    {
+      "timestamp": "00:36",
+      "elapsed_time": 36.823456048965454,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          898,
+          429,
+          376,
+          596
+        ]
+      },
+      "confidence": {
+        "laptop": 0.6206725239753723
+      },
+      "frame_id": "01f929e6",
+      "image_path": "video_insights/live_session_20250412_194624/images/01f929e6.jpg"
+    },
+    {
+      "timestamp": "00:37",
+      "elapsed_time": 37.151914834976196,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          928,
+          428,
+          347,
+          587
+        ]
+      },
+      "confidence": {
+        "laptop": 0.46606117486953735
+      },
+      "frame_id": "9b66ad51",
+      "image_path": "video_insights/live_session_20250412_194624/images/9b66ad51.jpg"
+    },
+    {
+      "timestamp": "00:37",
+      "elapsed_time": 37.75156307220459,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          912,
+          426,
+          361,
+          588
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9312358498573303
+      },
+      "frame_id": "33799be8",
+      "image_path": "video_insights/live_session_20250412_194624/images/33799be8.jpg"
+    },
+    {
+      "timestamp": "00:38",
+      "elapsed_time": 38.051591873168945,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          881,
+          428,
+          386,
+          590
+        ],
+        "tv": [
+          1050,
+          21,
+          230,
+          596
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9330736994743347,
+        "tv": 0.4836997389793396
+      },
+      "frame_id": "1d6c318a",
+      "image_path": "video_insights/live_session_20250412_194624/images/1d6c318a.jpg"
+    },
+    {
+      "timestamp": "00:38",
+      "elapsed_time": 38.35202980041504,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          843,
+          429,
+          414,
+          600
+        ],
+        "tv": [
+          1026,
+          26,
+          253,
+          595
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9249209761619568,
+        "tv": 0.6817758679389954
+      },
+      "frame_id": "4d2e432c",
+      "image_path": "video_insights/live_session_20250412_194624/images/4d2e432c.jpg"
+    },
+    {
+      "timestamp": "00:38",
+      "elapsed_time": 38.65198302268982,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          801,
+          430,
+          443,
+          610
+        ],
+        "tv": [
+          1008,
+          24,
+          271,
+          599
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9230057001113892,
+        "tv": 0.7402045130729675
+      },
+      "frame_id": "7271928f",
+      "image_path": "video_insights/live_session_20250412_194624/images/7271928f.jpg"
+    },
+    {
+      "timestamp": "00:38",
+      "elapsed_time": 38.951985120773315,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          756,
+          432,
+          474,
+          618
+        ],
+        "tv": [
+          995,
+          23,
+          285,
+          600
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9211338758468628,
+        "tv": 0.7025465369224548
+      },
+      "frame_id": "b9e1857f",
+      "image_path": "video_insights/live_session_20250412_194624/images/b9e1857f.jpg"
+    },
+    {
+      "timestamp": "00:39",
+      "elapsed_time": 39.251784801483154,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          711,
+          434,
+          505,
+          626
+        ],
+        "tv": [
+          985,
+          22,
+          295,
+          601
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8977459073066711,
+        "tv": 0.7173471450805664
+      },
+      "frame_id": "1bec4540",
+      "image_path": "video_insights/live_session_20250412_194624/images/1bec4540.jpg"
+    }
+  ]
+}

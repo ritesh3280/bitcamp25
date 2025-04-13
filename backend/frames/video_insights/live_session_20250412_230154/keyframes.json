@@ -1,0 +1,736 @@
+{
+  "metadata": {
+    "created": "2025-04-12T23:01:54.717229",
+    "version": "1.0"
+  },
+  "frames": [
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.6465396881103516,
+      "objects": [
+        "mouse",
+        "keyboard"
+      ],
+      "boxes": {
+        "mouse": [
+          1053,
+          938,
+          82,
+          79
+        ],
+        "keyboard": [
+          728,
+          785,
+          305,
+          160
+        ]
+      },
+      "confidence": {
+        "mouse": 0.47629648447036743,
+        "keyboard": 0.7824082374572754
+      },
+      "frame_id": "9456ce72",
+      "image_path": "video_insights/live_session_20250412_230154/images/9456ce72.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:01:57.998086"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.073612689971924,
+      "objects": [
+        "mouse",
+        "keyboard",
+        "laptop"
+      ],
+      "boxes": {
+        "mouse": [
+          1055,
+          938,
+          80,
+          79
+        ],
+        "keyboard": [
+          727,
+          778,
+          304,
+          155
+        ],
+        "laptop": [
+          657,
+          535,
+          226,
+          269
+        ]
+      },
+      "confidence": {
+        "mouse": 0.5835021734237671,
+        "keyboard": 0.7692207098007202,
+        "laptop": 0.6579368710517883
+      },
+      "frame_id": "e6c81107",
+      "image_path": "video_insights/live_session_20250412_230154/images/e6c81107.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:01:58.213169"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.4073076248168945,
+      "objects": [
+        "mouse",
+        "keyboard",
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "mouse": [
+          1055,
+          938,
+          80,
+          79
+        ],
+        "keyboard": [
+          725,
+          773,
+          306,
+          152
+        ],
+        "laptop": [
+          656,
+          530,
+          226,
+          269
+        ],
+        "tv": [
+          806,
+          398,
+          443,
+          258
+        ]
+      },
+      "confidence": {
+        "mouse": 0.5835021734237671,
+        "keyboard": 0.8116224408149719,
+        "laptop": 0.8369236588478088,
+        "tv": 0.5085107088088989
+      },
+      "frame_id": "5bd83fe2",
+      "image_path": "video_insights/live_session_20250412_230154/images/5bd83fe2.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:01:58.515002"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.0459840297698975,
+      "objects": [
+        "mouse",
+        "keyboard",
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "mouse": [
+          1057,
+          938,
+          78,
+          79
+        ],
+        "keyboard": [
+          726,
+          764,
+          307,
+          148
+        ],
+        "laptop": [
+          661,
+          521,
+          225,
+          269
+        ],
+        "tv": [
+          815,
+          391,
+          423,
+          260
+        ]
+      },
+      "confidence": {
+        "mouse": 0.7360032796859741,
+        "keyboard": 0.5831512212753296,
+        "laptop": 0.45817744731903076,
+        "tv": 0.5286035537719727
+      },
+      "frame_id": "32356506",
+      "image_path": "video_insights/live_session_20250412_230154/images/32356506.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:01:59.172179"
+      }
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.312240839004517,
+      "objects": [
+        "keyboard",
+        "mouse",
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "keyboard": [
+          727,
+          752,
+          307,
+          144
+        ],
+        "mouse": [
+          771,
+          870,
+          83,
+          82
+        ],
+        "laptop": [
+          666,
+          515,
+          223,
+          268
+        ],
+        "tv": [
+          817,
+          382,
+          418,
+          261
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.7437811493873596,
+        "mouse": 0.4782883822917938,
+        "laptop": 0.4186975061893463,
+        "tv": 0.569082498550415
+      },
+      "frame_id": "d3270605",
+      "image_path": "video_insights/live_session_20250412_230154/images/d3270605.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:02:00.780256"
+      }
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.740245819091797,
+      "objects": [
+        "keyboard",
+        "mouse",
+        "tv"
+      ],
+      "boxes": {
+        "keyboard": [
+          727,
+          752,
+          307,
+          144
+        ],
+        "mouse": [
+          771,
+          870,
+          83,
+          82
+        ],
+        "tv": [
+          817,
+          382,
+          418,
+          261
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.7437811493873596,
+        "mouse": 0.4782883822917938,
+        "tv": 0.569082498550415
+      },
+      "frame_id": "2c1d0969",
+      "image_path": "video_insights/live_session_20250412_230154/images/2c1d0969.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:02:00.819744"
+      }
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.872854709625244,
+      "objects": [
+        "keyboard",
+        "mouse",
+        "tv"
+      ],
+      "boxes": {
+        "keyboard": [
+          718,
+          741,
+          309,
+          142
+        ],
+        "mouse": [
+          715,
+          849,
+          88,
+          85
+        ],
+        "tv": [
+          817,
+          382,
+          418,
+          261
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.5889768004417419,
+        "mouse": 0.6438257694244385,
+        "tv": 0.569082498550415
+      },
+      "frame_id": "a6ffd24f",
+      "image_path": "video_insights/live_session_20250412_230154/images/a6ffd24f.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:02:01.136637"
+      }
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.653184652328491,
+      "objects": [
+        "keyboard",
+        "tv",
+        "mouse"
+      ],
+      "boxes": {
+        "keyboard": [
+          706,
+          722,
+          307,
+          142
+        ],
+        "tv": [
+          806,
+          365,
+          434,
+          277
+        ],
+        "mouse": [
+          712,
+          846,
+          92,
+          86
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.508873462677002,
+        "tv": 0.5026187896728516,
+        "mouse": 0.5712879300117493
+      },
+      "frame_id": "525a48c2",
+      "image_path": "video_insights/live_session_20250412_230154/images/525a48c2.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:02:01.756341"
+      }
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.777875900268555,
+      "objects": [
+        "keyboard",
+        "mouse"
+      ],
+      "boxes": {
+        "keyboard": [
+          694,
+          707,
+          304,
+          141
+        ],
+        "mouse": [
+          712,
+          844,
+          93,
+          85
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.5014603734016418,
+        "mouse": 0.5190930366516113
+      },
+      "frame_id": "841cacb8",
+      "image_path": "video_insights/live_session_20250412_230154/images/841cacb8.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:02:04.047678"
+      }
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.446680784225464,
+      "objects": [
+        "keyboard"
+      ],
+      "boxes": {
+        "keyboard": [
+          683,
+          694,
+          298,
+          141
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.43098050355911255
+      },
+      "frame_id": "5da4a65d",
+      "image_path": "video_insights/live_session_20250412_230154/images/5da4a65d.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T23:02:03.821614"
+      }
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.57783579826355,
+      "objects": [
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "keyboard": [
+          678,
+          690,
+          296,
+          141
+        ],
+        "tv": [
+          768,
+          305,
+          487,
+          308
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.43998074531555176,
+        "tv": 0.5159866213798523
+      },
+      "frame_id": "08f591fc",
+      "image_path": "video_insights/live_session_20250412_230154/images/08f591fc.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.172670841217041,
+      "objects": [
+        "keyboard",
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "keyboard": [
+          682,
+          689,
+          291,
+          140
+        ],
+        "tv": [
+          772,
+          302,
+          483,
+          305
+        ],
+        "laptop": [
+          652,
+          429,
+          348,
+          399
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.536258339881897,
+        "tv": 0.6539626717567444,
+        "laptop": 0.4395427703857422
+      },
+      "frame_id": "98ea56f6",
+      "image_path": "video_insights/live_session_20250412_230154/images/98ea56f6.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.473100662231445,
+      "objects": [
+        "keyboard",
+        "tv",
+        "laptop",
+        "mouse"
+      ],
+      "boxes": {
+        "keyboard": [
+          682,
+          689,
+          293,
+          138
+        ],
+        "tv": [
+          772,
+          302,
+          483,
+          305
+        ],
+        "laptop": [
+          652,
+          429,
+          348,
+          399
+        ],
+        "mouse": [
+          720,
+          829,
+          94,
+          86
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.4108539819717407,
+        "tv": 0.6539626717567444,
+        "laptop": 0.4395427703857422,
+        "mouse": 0.4445881247520447
+      },
+      "frame_id": "dc2e229b",
+      "image_path": "video_insights/live_session_20250412_230154/images/dc2e229b.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.641080856323242,
+      "objects": [
+        "keyboard",
+        "laptop",
+        "mouse"
+      ],
+      "boxes": {
+        "keyboard": [
+          682,
+          689,
+          293,
+          138
+        ],
+        "laptop": [
+          652,
+          429,
+          348,
+          399
+        ],
+        "mouse": [
+          720,
+          829,
+          94,
+          86
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.4108539819717407,
+        "laptop": 0.4395427703857422,
+        "mouse": 0.4445881247520447
+      },
+      "frame_id": "36f19dfc",
+      "image_path": "video_insights/live_session_20250412_230154/images/36f19dfc.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.00600290298462,
+      "objects": [
+        "keyboard",
+        "mouse"
+      ],
+      "boxes": {
+        "keyboard": [
+          682,
+          689,
+          293,
+          138
+        ],
+        "mouse": [
+          720,
+          829,
+          94,
+          86
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.4108539819717407,
+        "mouse": 0.4445881247520447
+      },
+      "frame_id": "b02c5a7b",
+      "image_path": "video_insights/live_session_20250412_230154/images/b02c5a7b.jpg"
+    },
+    {
+      "timestamp": "00:11",
+      "elapsed_time": 11.977876901626587,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          751,
+          354,
+          304,
+          275
+        ]
+      },
+      "confidence": {
+        "tv": 0.8318910598754883
+      },
+      "frame_id": "f782d6e1",
+      "image_path": "video_insights/live_session_20250412_230154/images/f782d6e1.jpg"
+    },
+    {
+      "timestamp": "00:13",
+      "elapsed_time": 13.177990913391113,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          650,
+          86,
+          188,
+          361
+        ]
+      },
+      "confidence": {
+        "tv": 0.4248889088630676
+      },
+      "frame_id": "763f7af7",
+      "image_path": "video_insights/live_session_20250412_230154/images/763f7af7.jpg"
+    },
+    {
+      "timestamp": "00:14",
+      "elapsed_time": 14.811777830123901,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          704,
+          4,
+          364,
+          309
+        ]
+      },
+      "confidence": {
+        "tv": 0.7576227188110352
+      },
+      "frame_id": "af2256b8",
+      "image_path": "video_insights/live_session_20250412_230154/images/af2256b8.jpg"
+    },
+    {
+      "timestamp": "00:15",
+      "elapsed_time": 15.111780881881714,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          731,
+          4,
+          355,
+          281
+        ]
+      },
+      "confidence": {
+        "tv": 0.4889579713344574
+      },
+      "frame_id": "c9823c54",
+      "image_path": "video_insights/live_session_20250412_230154/images/c9823c54.jpg"
+    },
+    {
+      "timestamp": "00:16",
+      "elapsed_time": 16.906187057495117,
+      "objects": [
+        "tv"
+      ],
+      "boxes": {
+        "tv": [
+          880,
+          361,
+          378,
+          271
+        ]
+      },
+      "confidence": {
+        "tv": 0.49126681685447693
+      },
+      "frame_id": "3ed1ee31",
+      "image_path": "video_insights/live_session_20250412_230154/images/3ed1ee31.jpg"
+    },
+    {
+      "timestamp": "00:17",
+      "elapsed_time": 17.842185020446777,
+      "objects": [
+        "tv",
+        "mouse",
+        "keyboard"
+      ],
+      "boxes": {
+        "tv": [
+          879,
+          366,
+          378,
+          262
+        ],
+        "mouse": [
+          820,
+          820,
+          81,
+          72
+        ],
+        "keyboard": [
+          814,
+          698,
+          252,
+          115
+        ]
+      },
+      "confidence": {
+        "tv": 0.47610828280448914,
+        "mouse": 0.6184250712394714,
+        "keyboard": 0.6023558974266052
+      },
+      "frame_id": "ac269d33",
+      "image_path": "video_insights/live_session_20250412_230154/images/ac269d33.jpg"
+    },
+    {
+      "timestamp": "00:18",
+      "elapsed_time": 18.046319723129272,
+      "objects": [
+        "mouse",
+        "keyboard"
+      ],
+      "boxes": {
+        "mouse": [
+          820,
+          820,
+          81,
+          72
+        ],
+        "keyboard": [
+          814,
+          698,
+          252,
+          115
+        ]
+      },
+      "confidence": {
+        "mouse": 0.6184250712394714,
+        "keyboard": 0.6023558974266052
+      },
+      "frame_id": "3c1669be",
+      "image_path": "video_insights/live_session_20250412_230154/images/3c1669be.jpg"
+    }
+  ]
+}

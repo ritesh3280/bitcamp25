@@ -1,0 +1,1240 @@
+{
+  "metadata": {
+    "created": "2025-04-12T22:41:29.407177",
+    "version": "1.0"
+  },
+  "frames": [
+    {
+      "timestamp": "00:00",
+      "elapsed_time": 0.0371098518371582,
+      "objects": [
+        "keyboard",
+        "tv",
+        "mouse"
+      ],
+      "boxes": {
+        "keyboard": [
+          646,
+          695,
+          238,
+          277
+        ],
+        "tv": [
+          746,
+          245,
+          516,
+          384
+        ],
+        "mouse": [
+          910,
+          754,
+          185,
+          89
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.49208763241767883,
+        "tv": 0.797914981842041,
+        "mouse": 0.5838578343391418
+      },
+      "frame_id": "434d68db",
+      "image_path": "video_insights/live_session_20250412_224129/images/434d68db.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:31.102664"
+      }
+    },
+    {
+      "timestamp": "00:01",
+      "elapsed_time": 1.2715458869934082,
+      "objects": [
+        "keyboard",
+        "tv",
+        "mouse",
+        "laptop"
+      ],
+      "boxes": {
+        "keyboard": [
+          646,
+          695,
+          238,
+          277
+        ],
+        "tv": [
+          742,
+          245,
+          519,
+          387
+        ],
+        "mouse": [
+          910,
+          754,
+          185,
+          89
+        ],
+        "laptop": [
+          644,
+          495,
+          231,
+          474
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.49208763241767883,
+        "tv": 0.7578446269035339,
+        "mouse": 0.5838578343391418,
+        "laptop": 0.591235876083374
+      },
+      "frame_id": "d9e793f6",
+      "image_path": "video_insights/live_session_20250412_224129/images/d9e793f6.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:31.576922"
+      }
+    },
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.2031619548797607,
+      "objects": [
+        "keyboard",
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "keyboard": [
+          648,
+          768,
+          589,
+          303
+        ],
+        "tv": [
+          737,
+          245,
+          524,
+          394
+        ],
+        "laptop": [
+          643,
+          503,
+          232,
+          465
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.8441500663757324,
+        "tv": 0.5015218257904053,
+        "laptop": 0.6420948505401611
+      },
+      "frame_id": "18a22ee6",
+      "image_path": "video_insights/live_session_20250412_224129/images/18a22ee6.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:31.881708"
+      }
+    },
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.6370630264282227,
+      "objects": [
+        "keyboard",
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "keyboard": [
+          648,
+          768,
+          589,
+          303
+        ],
+        "tv": [
+          738,
+          270,
+          523,
+          391
+        ],
+        "laptop": [
+          644,
+          543,
+          235,
+          459
+        ]
+      },
+      "confidence": {
+        "keyboard": 0.8441500663757324,
+        "tv": 0.4456639587879181,
+        "laptop": 0.5403492450714111
+      },
+      "frame_id": "f7e4dbd9",
+      "image_path": "video_insights/live_session_20250412_224129/images/f7e4dbd9.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:32.406469"
+      }
+    },
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.837197780609131,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          738,
+          270,
+          523,
+          391
+        ],
+        "laptop": [
+          644,
+          543,
+          235,
+          459
+        ]
+      },
+      "confidence": {
+        "tv": 0.4456639587879181,
+        "laptop": 0.5403492450714111
+      },
+      "frame_id": "4d817190",
+      "image_path": "video_insights/live_session_20250412_224129/images/4d817190.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:32.598472"
+      }
+    },
+    {
+      "timestamp": "00:02",
+      "elapsed_time": 2.969667911529541,
+      "objects": [
+        "tv",
+        "laptop"
+      ],
+      "boxes": {
+        "tv": [
+          738,
+          270,
+          523,
+          391
+        ],
+        "laptop": [
+          644,
+          568,
+          241,
+          451
+        ]
+      },
+      "confidence": {
+        "tv": 0.4456639587879181,
+        "laptop": 0.7007408738136292
+      },
+      "frame_id": "9df0cbd5",
+      "image_path": "video_insights/live_session_20250412_224129/images/9df0cbd5.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:32.719757"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.169311046600342,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          644,
+          568,
+          241,
+          451
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7007408738136292
+      },
+      "frame_id": "2d9a47dc",
+      "image_path": "video_insights/live_session_20250412_224129/images/2d9a47dc.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:32.821227"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.303956985473633,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          644,
+          587,
+          245,
+          443
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7063730955123901
+      },
+      "frame_id": "3d00ff27",
+      "image_path": "video_insights/live_session_20250412_224129/images/3d00ff27.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:33.072961"
+      }
+    },
+    {
+      "timestamp": "00:03",
+      "elapsed_time": 3.9362130165100098,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          644,
+          602,
+          248,
+          435
+        ],
+        "keyboard": [
+          647,
+          881,
+          243,
+          197
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7671570777893066,
+        "keyboard": 0.5485290884971619
+      },
+      "frame_id": "bc5248dc",
+      "image_path": "video_insights/live_session_20250412_224129/images/bc5248dc.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:33.614250"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.23703408241272,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          644,
+          612,
+          249,
+          430
+        ],
+        "keyboard": [
+          647,
+          881,
+          243,
+          197
+        ],
+        "tv": [
+          702,
+          422,
+          561,
+          400
+        ]
+      },
+      "confidence": {
+        "laptop": 0.6732041835784912,
+        "keyboard": 0.5485290884971619,
+        "tv": 0.4738485813140869
+      },
+      "frame_id": "3b1e5d30",
+      "image_path": "video_insights/live_session_20250412_224129/images/3b1e5d30.jpg",
+      "llm_description": {
+        "error": "LLM API error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your_ope********here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}",
+        "timestamp": "2025-04-12T22:41:33.978539"
+      }
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.563985824584961,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          644,
+          620,
+          252,
+          426
+        ],
+        "keyboard": [
+          647,
+          881,
+          243,
+          197
+        ],
+        "tv": [
+          680,
+          412,
+          583,
+          407
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7910733222961426,
+        "keyboard": 0.5485290884971619,
+        "tv": 0.5383542776107788
+      },
+      "frame_id": "fd35154c",
+      "image_path": "video_insights/live_session_20250412_224129/images/fd35154c.jpg"
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.735318899154663,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          644,
+          620,
+          252,
+          426
+        ],
+        "tv": [
+          680,
+          412,
+          583,
+          407
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7910733222961426,
+        "tv": 0.5383542776107788
+      },
+      "frame_id": "10e9ed53",
+      "image_path": "video_insights/live_session_20250412_224129/images/10e9ed53.jpg"
+    },
+    {
+      "timestamp": "00:04",
+      "elapsed_time": 4.869527816772461,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          645,
+          641,
+          255,
+          418
+        ],
+        "tv": [
+          671,
+          405,
+          592,
+          411
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8383510708808899,
+        "tv": 0.502352237701416
+      },
+      "frame_id": "78965bd5",
+      "image_path": "video_insights/live_session_20250412_224129/images/78965bd5.jpg"
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.469228744506836,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          645,
+          662,
+          259,
+          411
+        ],
+        "tv": [
+          691,
+          405,
+          572,
+          402
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9009433388710022,
+        "tv": 0.6769922971725464
+      },
+      "frame_id": "26a39796",
+      "image_path": "video_insights/live_session_20250412_224129/images/26a39796.jpg"
+    },
+    {
+      "timestamp": "00:05",
+      "elapsed_time": 5.769268989562988,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          645,
+          662,
+          259,
+          411
+        ],
+        "tv": [
+          721,
+          402,
+          541,
+          391
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9009433388710022,
+        "tv": 0.6178404092788696
+      },
+      "frame_id": "a5c295a1",
+      "image_path": "video_insights/live_session_20250412_224129/images/a5c295a1.jpg"
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.069427013397217,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          645,
+          654,
+          274,
+          419
+        ],
+        "tv": [
+          747,
+          397,
+          516,
+          386
+        ],
+        "keyboard": [
+          648,
+          778,
+          370,
+          299
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7713941931724548,
+        "tv": 0.6135728359222412,
+        "keyboard": 0.527941882610321
+      },
+      "frame_id": "2111a2ba",
+      "image_path": "video_insights/live_session_20250412_224129/images/2111a2ba.jpg"
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.369403839111328,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          641,
+          292,
+          431
+        ],
+        "tv": [
+          770,
+          391,
+          493,
+          382
+        ],
+        "keyboard": [
+          647,
+          768,
+          384,
+          307
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7583736777305603,
+        "tv": 0.7320972681045532,
+        "keyboard": 0.5824757218360901
+      },
+      "frame_id": "12375052",
+      "image_path": "video_insights/live_session_20250412_224129/images/12375052.jpg"
+    },
+    {
+      "timestamp": "00:06",
+      "elapsed_time": 6.6695098876953125,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          625,
+          309,
+          446
+        ],
+        "tv": [
+          799,
+          381,
+          464,
+          377
+        ],
+        "keyboard": [
+          647,
+          761,
+          388,
+          311
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7037356495857239,
+        "tv": 0.7655981183052063,
+        "keyboard": 0.6857891082763672
+      },
+      "frame_id": "ee8f5cd9",
+      "image_path": "video_insights/live_session_20250412_224129/images/ee8f5cd9.jpg"
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.002918004989624,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          610,
+          319,
+          461
+        ],
+        "tv": [
+          825,
+          371,
+          438,
+          373
+        ],
+        "keyboard": [
+          647,
+          761,
+          388,
+          311
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7840093374252319,
+        "tv": 0.5556368827819824,
+        "keyboard": 0.6857891082763672
+      },
+      "frame_id": "867009c6",
+      "image_path": "video_insights/live_session_20250412_224129/images/867009c6.jpg"
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.303706884384155,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          598,
+          323,
+          472
+        ],
+        "tv": [
+          849,
+          368,
+          414,
+          366
+        ],
+        "keyboard": [
+          647,
+          767,
+          367,
+          305
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7501645684242249,
+        "tv": 0.6311574578285217,
+        "keyboard": 0.5467836856842041
+      },
+      "frame_id": "12d48247",
+      "image_path": "video_insights/live_session_20250412_224129/images/12d48247.jpg"
+    },
+    {
+      "timestamp": "00:07",
+      "elapsed_time": 7.602792024612427,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          589,
+          327,
+          481
+        ],
+        "tv": [
+          868,
+          366,
+          395,
+          360
+        ],
+        "keyboard": [
+          647,
+          772,
+          350,
+          301
+        ]
+      },
+      "confidence": {
+        "laptop": 0.741990327835083,
+        "tv": 0.7532796859741211,
+        "keyboard": 0.4164499044418335
+      },
+      "frame_id": "f36de44e",
+      "image_path": "video_insights/live_session_20250412_224129/images/f36de44e.jpg"
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.402081727981567,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          647,
+          584,
+          329,
+          485
+        ],
+        "tv": [
+          869,
+          361,
+          394,
+          363
+        ]
+      },
+      "confidence": {
+        "laptop": 0.6705350875854492,
+        "tv": 0.6941545605659485
+      },
+      "frame_id": "de03e1a6",
+      "image_path": "video_insights/live_session_20250412_224129/images/de03e1a6.jpg"
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.535951852798462,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          594,
+          316,
+          476
+        ],
+        "tv": [
+          869,
+          361,
+          394,
+          363
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7605733275413513,
+        "tv": 0.6941545605659485
+      },
+      "frame_id": "833cccd6",
+      "image_path": "video_insights/live_session_20250412_224129/images/833cccd6.jpg"
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.735498905181885,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          594,
+          316,
+          476
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7605733275413513
+      },
+      "frame_id": "631d0cab",
+      "image_path": "video_insights/live_session_20250412_224129/images/631d0cab.jpg"
+    },
+    {
+      "timestamp": "00:08",
+      "elapsed_time": 8.869325876235962,
+      "objects": [
+        "laptop"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          604,
+          297,
+          466
+        ]
+      },
+      "confidence": {
+        "laptop": 0.5057224035263062
+      },
+      "frame_id": "9b2a7e5b",
+      "image_path": "video_insights/live_session_20250412_224129/images/9b2a7e5b.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.202693939208984,
+      "objects": [
+        "laptop",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          645,
+          615,
+          278,
+          456
+        ],
+        "tv": [
+          649,
+          286,
+          614,
+          505
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7836344838142395,
+        "tv": 0.6577925086021423
+      },
+      "frame_id": "a8582c59",
+      "image_path": "video_insights/live_session_20250412_224129/images/a8582c59.jpg"
+    },
+    {
+      "timestamp": "00:09",
+      "elapsed_time": 9.503276824951172,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          645,
+          620,
+          270,
+          451
+        ],
+        "tv": [
+          711,
+          315,
+          552,
+          454
+        ],
+        "keyboard": [
+          730,
+          859,
+          528,
+          212
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8816402554512024,
+        "tv": 0.5768161416053772,
+        "keyboard": 0.46769946813583374
+      },
+      "frame_id": "fc37888b",
+      "image_path": "video_insights/live_session_20250412_224129/images/fc37888b.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.130510807037354,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          603,
+          297,
+          461
+        ],
+        "tv": [
+          711,
+          315,
+          552,
+          454
+        ],
+        "keyboard": [
+          689,
+          789,
+          468,
+          261
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8892219066619873,
+        "tv": 0.5768161416053772,
+        "keyboard": 0.5190701484680176
+      },
+      "frame_id": "d5f4a75e",
+      "image_path": "video_insights/live_session_20250412_224129/images/d5f4a75e.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.30302906036377,
+      "objects": [
+        "laptop",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          603,
+          297,
+          461
+        ],
+        "keyboard": [
+          689,
+          789,
+          468,
+          261
+        ]
+      },
+      "confidence": {
+        "laptop": 0.8892219066619873,
+        "keyboard": 0.5190701484680176
+      },
+      "frame_id": "3d9d49ca",
+      "image_path": "video_insights/live_session_20250412_224129/images/3d9d49ca.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.435858964920044,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "mouse",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          590,
+          316,
+          467
+        ],
+        "keyboard": [
+          689,
+          789,
+          468,
+          261
+        ],
+        "mouse": [
+          649,
+          1022,
+          138,
+          58
+        ],
+        "tv": [
+          960,
+          287,
+          304,
+          385
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9239859580993652,
+        "keyboard": 0.5190701484680176,
+        "mouse": 0.49134790897369385,
+        "tv": 0.42192205786705017
+      },
+      "frame_id": "7b414cb5",
+      "image_path": "video_insights/live_session_20250412_224129/images/7b414cb5.jpg"
+    },
+    {
+      "timestamp": "00:10",
+      "elapsed_time": 10.776378870010376,
+      "objects": [
+        "laptop",
+        "keyboard",
+        "mouse",
+        "tv"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          568,
+          333,
+          480
+        ],
+        "keyboard": [
+          820,
+          800,
+          444,
+          267
+        ],
+        "mouse": [
+          649,
+          1022,
+          138,
+          58
+        ],
+        "tv": [
+          949,
+          271,
+          313,
+          384
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9240416288375854,
+        "keyboard": 0.776401162147522,
+        "mouse": 0.49134790897369385,
+        "tv": 0.6093409657478333
+      },
+      "frame_id": "959b8f6f",
+      "image_path": "video_insights/live_session_20250412_224129/images/959b8f6f.jpg"
+    },
+    {
+      "timestamp": "00:11",
+      "elapsed_time": 11.169313907623291,
+      "objects": [
+        "laptop",
+        "mouse",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          546,
+          339,
+          491
+        ],
+        "mouse": [
+          980,
+          748,
+          203,
+          94
+        ],
+        "tv": [
+          908,
+          262,
+          354,
+          384
+        ],
+        "keyboard": [
+          747,
+          771,
+          515,
+          297
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9270110130310059,
+        "mouse": 0.40744057297706604,
+        "tv": 0.4948161244392395,
+        "keyboard": 0.862212061882019
+      },
+      "frame_id": "62dc880e",
+      "image_path": "video_insights/live_session_20250412_224129/images/62dc880e.jpg"
+    },
+    {
+      "timestamp": "00:11",
+      "elapsed_time": 11.498029947280884,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          546,
+          339,
+          491
+        ],
+        "tv": [
+          880,
+          259,
+          383,
+          386
+        ],
+        "keyboard": [
+          646,
+          697,
+          287,
+          303
+        ],
+        "mouse": [
+          980,
+          748,
+          203,
+          94
+        ]
+      },
+      "confidence": {
+        "laptop": 0.9270110130310059,
+        "tv": 0.6790744066238403,
+        "keyboard": 0.6862024068832397,
+        "mouse": 0.40744057297706604
+      },
+      "frame_id": "e78c322c",
+      "image_path": "video_insights/live_session_20250412_224129/images/e78c322c.jpg"
+    },
+    {
+      "timestamp": "00:11",
+      "elapsed_time": 11.850045919418335,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard",
+        "mouse"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          531,
+          341,
+          499
+        ],
+        "tv": [
+          858,
+          261,
+          404,
+          386
+        ],
+        "keyboard": [
+          646,
+          699,
+          279,
+          305
+        ],
+        "mouse": [
+          980,
+          748,
+          203,
+          94
+        ]
+      },
+      "confidence": {
+        "laptop": 0.5151209235191345,
+        "tv": 0.7790670394897461,
+        "keyboard": 0.47941505908966064,
+        "mouse": 0.40744057297706604
+      },
+      "frame_id": "73f8ef69",
+      "image_path": "video_insights/live_session_20250412_224129/images/73f8ef69.jpg"
+    },
+    {
+      "timestamp": "00:12",
+      "elapsed_time": 12.104319095611572,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          646,
+          531,
+          341,
+          499
+        ],
+        "tv": [
+          858,
+          261,
+          404,
+          386
+        ],
+        "keyboard": [
+          646,
+          699,
+          279,
+          305
+        ]
+      },
+      "confidence": {
+        "laptop": 0.5151209235191345,
+        "tv": 0.7790670394897461,
+        "keyboard": 0.47941505908966064
+      },
+      "frame_id": "7b8a08ce",
+      "image_path": "video_insights/live_session_20250412_224129/images/7b8a08ce.jpg"
+    },
+    {
+      "timestamp": "00:12",
+      "elapsed_time": 12.236128091812134,
+      "objects": [
+        "laptop",
+        "tv",
+        "keyboard"
+      ],
+      "boxes": {
+        "laptop": [
+          647,
+          516,
+          344,
+          504
+        ],
+        "tv": [
+          841,
+          257,
+          421,
+          391
+        ],
+        "keyboard": [
+          646,
+          699,
+          279,
+          305
+        ]
+      },
+      "confidence": {
+        "laptop": 0.7496970891952515,
+        "tv": 0.7446666955947876,
+        "keyboard": 0.47941505908966064
+      },
+      "frame_id": "f8dbabb5",
+      "image_path": "video_insights/live_session_20250412_224129/images/f8dbabb5.jpg"
+    }
+  ]
+}
